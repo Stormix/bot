@@ -1,6 +1,10 @@
-import { ILogObj, Logger } from 'tslog';
-import { Container } from 'typedi';
+import type { ILogObj } from 'tslog';
+import { Logger as TsLogger } from 'tslog';
 
-const logger = new Logger<ILogObj>();
+class Logger extends TsLogger<ILogObj> {
+  constructor() {
+    super({ name: 'Bot' });
+  }
+}
 
-Container.set('logger', logger);
+export default Logger;

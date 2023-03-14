@@ -1,8 +1,6 @@
-import '@/lib/logger';
-import 'reflect-metadata';
-import { Container } from 'typedi';
-import Bot from './bot';
+import Bot from './lib/bot';
+import container from './lib/container';
 
-const bot = Container.get(Bot);
+const bot = container.get(Bot);
 
 bot.listen();

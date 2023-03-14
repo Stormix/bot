@@ -1,4 +1,4 @@
-import Bot from '@/bot';
+import Bot from '@/lib/bot';
 
 abstract class Adapter {
   protected bot: Bot;

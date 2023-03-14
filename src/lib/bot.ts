@@ -1,18 +1,16 @@
-import Adapter from '@/adapters/adapter';
+import type Adapter from '@/adapters/adapter';
+import DiscordAdapter from '@/adapters/discord';
+import TwitchAdapter from '@/adapters/twitch';
+import type { BotConfig } from '@/configs/bot';
+import { defaultConfig } from '@/configs/bot';
+import type CommandManager from './commandManager';
+import type Logger from './logger';
 
-import { ILogObj, Logger } from 'tslog';
-import { Inject, Service } from 'typedi';
-import DiscordAdapter from './adapters/discord';
-import TwitchAdapter from './adapters/twitch';
-import { BotConfig, defaultConfig } from './configs/bot';
-
-@Service()
 class Bot {
   readonly config: BotConfig = defaultConfig;
   private readonly adapters: Adapter[] = [new TwitchAdapter(this), new DiscordAdapter(this)];
 
-  @Inject('logger')
-  readonly logger!: Logger<ILogObj>;
+  constructor(public readonly logger: Logger, public readonly commandManager: CommandManager) {}
 
   async setup() {
     this.logger.debug('Setting up bot...');

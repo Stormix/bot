@@ -1,4 +1,4 @@
-import env, { Env } from '../env';
+import env, { Env } from '../lib/env';
 
 export interface BotConfig {
   env: Env;
