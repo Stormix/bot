@@ -5,8 +5,10 @@
     }
   ],
   "settings": {
+    "typescript.preferences.importModuleSpecifier": "shortest",
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": true,
+      "source.organizeImports": true
     },
   }
 }

@@ -3,7 +3,10 @@ import { Logger as TsLogger } from 'tslog';
 
 class Logger extends TsLogger<ILogObj> {
   constructor() {
-    super({ name: 'Bot' });
+    super({
+      name: 'Bot',
+      prettyLogTemplate: '{{yyyy}}.{{mm}}.{{dd}} {{hh}}:{{MM}}:{{ss}}  {{logLevelName}}  [{{name}}]  '
+    });
   }
 }
 

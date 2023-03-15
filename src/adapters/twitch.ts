@@ -1,8 +1,36 @@
-import { Chat, ChatEvents } from 'twitch-js';
+import type Bot from '@/lib/bot';
+import type { TwitchCommandContext } from '@/types/command';
+import { CommandSource } from '@/types/command';
+import type { PrivateMessage } from 'twitch-js';
+import { Chat, ChatEvents, Commands } from 'twitch-js';
+import type { Context } from 'vm';
 import Adapter from './adapter';
 
-export default class TwitchAdapter extends Adapter {
-  private client: Chat | null = null;
+export default class TwitchAdapter extends Adapter<TwitchCommandContext> {
+  client: Chat | null = null;
+
+  constructor(bot: Bot) {
+    super(bot);
+  }
+
+  atAuthor(message: PrivateMessage) {
+    return `@${message.username}`;
+  }
+
+  createContext(message: PrivateMessage): TwitchCommandContext {
+    return {
+      source: CommandSource.Twitch,
+      atAuthor: this.atAuthor(message),
+      message,
+      adapter: this
+    };
+  }
+
+  async send(context: Context, message: string): Promise<void> {
+    if (!this.client) throw new Error('Twitch client is not initialized!');
+    await this.client.say(context.message.channel, message);
+  }
+
   async setup() {
     this.client = new Chat({
       username: this.bot.config.env.TWITCH_USERNAME,
@@ -17,6 +45,18 @@ export default class TwitchAdapter extends Adapter {
 
     this.client.once(ChatEvents.CONNECTED, (c) => {
       this.bot.logger.debug(`Logged in to twitch as ${c.username}`);
+    });
+
+    this.client.on(ChatEvents.ALL, async (message) => {
+      // if (message.isSelf) return; // TODO: make a bot account on twitch
+      if (message.command !== Commands.PRIVATE_MESSAGE) return;
+      if (!message.message.startsWith(this.bot.config.prefix)) return;
+      const args = message.message.slice(this.bot.config.prefix.length).trim().split(/ +/);
+      const command = args.shift()?.toLowerCase();
+
+      if (!command) return;
+
+      await this.bot.commandManager.evalCommand(command, args, this.createContext(message as PrivateMessage));
     });
 
     await this.client.connect();

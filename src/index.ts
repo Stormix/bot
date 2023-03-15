@@ -1,6 +1,8 @@
 import Bot from './lib/bot';
-import container from './lib/container';
 
-const bot = container.get(Bot);
+(async () => {
+  const bot = new Bot();
 
-bot.listen();
+  await bot.setup();
+  await bot.listen();
+})();
