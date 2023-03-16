@@ -1,7 +1,1 @@
-node_modules
-dist
-yarn-error.log
-.env
-.env.local
-.env.prod
-!.env.example
+node_modules/

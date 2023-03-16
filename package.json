@@ -1,37 +1,14 @@
 {
-  "name": "stormix-bot",
-  "version": "1.0.0",
-  "main": "index.js",
+  "name": "root",
+  "private": true,
   "author": "Anas Mazouni",
   "license": "MIT",
   "scripts": {
-    "build": "tsc && tsc-alias",
-    "start": "node dist/index.js",
-    "dev": "ts-node-dev -r tsconfig-paths/register --respawn src/index.ts",
-    "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix"
-  },
+    "graph": "npx nx graph",
+    "build": "lerna run build",
+    "dev": "lerna run dev"
+   },
   "devDependencies": {
-    "@types/lodash": "^4.14.191",
-    "@types/node": "^18.15.3",
-    "@typescript-eslint/eslint-plugin": "^5.55.0",
-    "@typescript-eslint/parser": "^5.55.0",
-    "eslint": "^8.36.0",
-    "eslint-config-prettier": "^8.7.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "prettier": "^2.8.4",
-    "ts-node-dev": "^2.0.0",
-    "tsc-alias": "^1.8.3",
-    "tsconfig-paths": "^4.1.2",
-    "typescript": "^4.9.5"
-  },
-  "dependencies": {
-    "discord.js": "^14.8.0",
-    "dotenv": "^16.0.3",
-    "envalid": "^7.3.1",
-    "glob": "^9.3.0",
-    "lodash": "^4.17.21",
-    "reflect-metadata": "^0.1.13",
-    "tslog": "^4.8.2",
-    "twitch-js": "^2.0.0-beta.45"
+    "lerna": "^6.5.1"
   }
 }
