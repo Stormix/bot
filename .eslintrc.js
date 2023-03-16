@@ -11,6 +11,7 @@ module.exports = {
   rules: {
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/ban-ts-comment': 'warn',
-    '@typescript-eslint/consistent-type-imports': 'error'
+    '@typescript-eslint/consistent-type-imports': 'error',
+    '@typescript-eslint/no-non-null-assertion': 'off'
   }
 };

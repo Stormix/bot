@@ -1,0 +1,6 @@
+define(hello, args(name, city),
+  say("Hello ", name, " from ", city, "! "),
+  say("Here is the weather in ",
+      http("https://wttr.in/", city, "?format=4")))
+
+hello("Anas", "Marseille")
