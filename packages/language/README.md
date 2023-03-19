@@ -16,12 +16,12 @@ pnpm install
 To compile:
 
 ```bash
-pnpm run exec <filename.tex>
+pnpm run exec <filename.bot>
 ```
 For example:
 
 ```bash
-pnpm run exec examples/weather.tex
+pnpm run exec examples/weather.bot
 ```
 Should output:
 

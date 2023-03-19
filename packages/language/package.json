@@ -1,12 +1,12 @@
 {
-  "name": "@stormix/tex",
+  "name": "@bot/language",
   "version": "1.0.0",
   "description": "",
   "main": "./dist/bin/index.js",
   "scripts": {
     "build": "tsc && tsc-alias",
-    "start": "node dist/main.js",
-    "dev": "ts-node-dev -r tsconfig-paths/register --respawn src/main.ts",
+    "start": "node dist/index.js",
+    "dev": "ts-node-dev -r tsconfig-paths/register --respawn src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "exec": "ts-node -r tsconfig-paths/register src/bin/index.ts"
   },

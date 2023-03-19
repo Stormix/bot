@@ -4,8 +4,9 @@ import type { EvalScope } from '@/lib/scoping';
 import { EvalContext } from '@/lib/scoping';
 import fs, { existsSync } from 'fs';
 import yargs from 'yargs/yargs';
+import { evaluate } from '..';
 
-const argv2 = yargs(process.argv.slice(2)).options({
+const args = yargs(process.argv.slice(2)).options({
   debug: {
     alias: 'd',
     description: 'Will dump the AST to the console',
@@ -15,16 +16,16 @@ const argv2 = yargs(process.argv.slice(2)).options({
 
 async function run() {
 
-  const file = argv2._[0] as string;
-  const debug = argv2.debug;
+  const file = args._[0] as string;
+  const debug = args.debug;
 
   // Read file content
   if (!existsSync(file)) {
     throw new Error(`File ${file} does not exist`);
   }
 
-  if (!file.endsWith('.tex')) {
-    throw new Error(`File ${file} is not a .tex file`);
+  if (!file.endsWith('.bot')) {
+    throw new Error(`File ${file} is not a .bot file`);
   }
 
   const content = fs.readFileSync(file, 'utf-8').replace(/\r?\n|\r/g, ''); // Remove newlines
@@ -47,15 +48,13 @@ async function run() {
     throw err;
   }
 
-  for (let i = 0; i < exprs.length; i++) {
-    if (debug) {
+  if (debug) {
+    for (let i = 0; i < exprs.length; i++) {
       exprs[i].dump();
-    } else {
-      const [_, err] = await context.evalExpr(exprs[i]);
-      if (err !== null) {
-        throw err;
-      }
+
     }
+  } else {
+    const results = await evaluate(content, loop);
   }
 }
 

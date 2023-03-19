@@ -9,12 +9,18 @@ export interface EvalScope {
 export class EvalContext {
   scopes: EvalScope[] = [];
 
+  constructor(initialScope?: EvalScope) {
+    if (initialScope !== undefined) {
+      this.scopes.push(initialScope);
+    }
+  }
+
   lookUpVar(name: string): [Expr | undefined, boolean] {
     const scopes = this.scopes;
     for (let i = scopes.length - 1; i >= 0; i--) {
-      const varr = scopes[i].vars[name];
-      if (varr !== undefined) {
-        return [varr, true];
+      const variable = scopes[i].vars[name];
+      if (variable !== undefined) {
+        return [variable, true];
       }
     }
     return [undefined, false];
@@ -70,5 +76,17 @@ export class EvalContext {
       default:
         throw new Error('unreachable');
     }
+  }
+
+  async evalExprs(exprs: Expr[]): Promise<[Expr | undefined, Error | null]> {
+    let last: Expr | undefined = undefined;
+    let err: Error | null = null;
+    for (let i = 0; i < exprs.length; i++) {
+      [last, err] = await this.evalExpr(exprs[i]);
+      if (err !== null) {
+        return [undefined, err];
+      }
+    }
+    return [last, null];
   }
 }
