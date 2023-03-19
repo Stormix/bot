@@ -11,6 +11,7 @@ importers:
   packages/bot:
     specifiers:
       '@bot/language': workspace:^1.0.0
+      '@prisma/client': ^4.11.0
       '@types/lodash': ^4.14.191
       '@types/node': ^18.15.3
       '@typescript-eslint/eslint-plugin': ^5.55.0
@@ -23,7 +24,9 @@ importers:
       eslint-plugin-prettier: ^4.2.1
       glob: ^9.3.0
       lodash: ^4.17.21
+      node-graceful-shutdown: ^1.1.5
       prettier: ^2.8.4
+      prisma: ^4.11.0
       reflect-metadata: ^0.1.13
       ts-node-dev: ^2.0.0
       tsc-alias: ^1.8.3
@@ -33,11 +36,14 @@ importers:
       typescript: ^4.9.5
     dependencies:
       '@bot/language': link:../language
+      '@prisma/client': 4.11.0_prisma@4.11.0
       discord.js: 14.8.0
       dotenv: 16.0.3
       envalid: 7.3.1
       glob: 9.3.0
       lodash: 4.17.21
+      node-graceful-shutdown: 1.1.5
+      prisma: 4.11.0
       reflect-metadata: 0.1.13
       tslog: 4.8.2
       twitch-js: 2.0.0-beta.45
@@ -60,6 +66,7 @@ importers:
       '@types/node': ^18.15.3
       '@types/yargs': ^17.0.22
       axios: ^1.3.4
+      concurrently: ^7.6.0
       ts-node: ^10.9.1
       ts-node-dev: ^2.0.0
       ts-utils: ^6.1.0
@@ -74,6 +81,7 @@ importers:
     devDependencies:
       '@types/node': 18.15.3
       '@types/yargs': 17.0.22
+      concurrently: 7.6.0
       ts-node: 10.9.1_cbfmry4sbbh4vatmdrsmatfg5a
       ts-node-dev: 2.0.0_cbfmry4sbbh4vatmdrsmatfg5a
       tsc-alias: 1.8.3
@@ -718,6 +726,29 @@ packages:
       esquery: 1.5.0
       typescript: 4.9.5
     dev: true
+
+  /@prisma/client/4.11.0_prisma@4.11.0:
+    resolution: {integrity: sha512-0INHYkQIqgAjrt7NzhYpeDQi8x3Nvylc2uDngKyFDDj1tTRQ4uV1HnVmd1sQEraeVAN63SOK0dgCKQHlvjL0KA==}
+    engines: {node: '>=14.17'}
+    requiresBuild: true
+    peerDependencies:
+      prisma: '*'
+    peerDependenciesMeta:
+      prisma:
+        optional: true
+    dependencies:
+      '@prisma/engines-version': 4.11.0-57.8fde8fef4033376662cad983758335009d522acb
+      prisma: 4.11.0
+    dev: false
+
+  /@prisma/engines-version/4.11.0-57.8fde8fef4033376662cad983758335009d522acb:
+    resolution: {integrity: sha512-3Vd8Qq06d5xD8Ch5WauWcUUrsVPdMC6Ge8ILji8RFfyhUpqon6qSyGM0apvr1O8n8qH8cKkEFqRPsYjuz5r83g==}
+    dev: false
+
+  /@prisma/engines/4.11.0:
+    resolution: {integrity: sha512-0AEBi2HXGV02cf6ASsBPhfsVIbVSDC9nbQed4iiY5eHttW9ZtMxHThuKZE1pnESbr8HRdgmFSa/Kn4OSNYuibg==}
+    requiresBuild: true
+    dev: false
 
   /@sapphire/async-queue/1.5.0:
     resolution: {integrity: sha512-JkLdIsP8fPAdh9ZZjrbHWR/+mZj0wvKS5ICibcLrRI1j84UmLMshx5n9QmL8b95d4onJ2xxiyugTgSAX7AalmA==}
@@ -1488,6 +1519,22 @@ packages:
       typedarray: 0.0.6
     dev: true
 
+  /concurrently/7.6.0:
+    resolution: {integrity: sha512-BKtRgvcJGeZ4XttiDiNcFiRlxoAeZOseqUvyYRUp/Vtd+9p1ULmeoSqGsDA+2ivdeDFpqrJvGvmI+StKfKl5hw==}
+    engines: {node: ^12.20.0 || ^14.13.0 || >=16.0.0}
+    hasBin: true
+    dependencies:
+      chalk: 4.1.2
+      date-fns: 2.29.3
+      lodash: 4.17.21
+      rxjs: 7.8.0
+      shell-quote: 1.8.0
+      spawn-command: 0.0.2-1
+      supports-color: 8.1.1
+      tree-kill: 1.2.2
+      yargs: 17.7.1
+    dev: true
+
   /config-chain/1.1.12:
     resolution: {integrity: sha512-a1eOIcu8+7lUInge4Rpf/n4Krkf3Dd9lqhljRzII1/Zno/kRtUWnznPO3jOKBmTEktkt3fkxisUcivoj0ebzoA==}
     dependencies:
@@ -1623,6 +1670,11 @@ packages:
   /dargs/7.0.0:
     resolution: {integrity: sha512-2iy1EkLdlBzQGvbweYRFxmFath8+K7+AKB0TlhHWkNuH+TmovaMH/Wp7V7R4u7f4SnX3OgLsU9t1NI9ioDnUpg==}
     engines: {node: '>=8'}
+    dev: true
+
+  /date-fns/2.29.3:
+    resolution: {integrity: sha512-dDCnyH2WnnKusqvZZ6+jA1O51Ibt8ZMRNkDZdyAyK4YfbDwa/cEmuztzG5pk6hqlp9aSBPYcjOlktquahGwGeA==}
+    engines: {node: '>=0.11'}
     dev: true
 
   /dateformat/3.0.3:
@@ -3378,6 +3430,11 @@ packages:
     dependencies:
       whatwg-url: 5.0.0
 
+  /node-graceful-shutdown/1.1.5:
+    resolution: {integrity: sha512-tlz8XpPr+pqrEGWFNLtMwd0HdFsCAKp5NCmMvwcTZTA0hyrVd7gkKbivDcSM5uYB1331/cEjNTtmVtqKy8OSBw==}
+    engines: {node: '>=6'}
+    dev: false
+
   /node-gyp-build/4.6.0:
     resolution: {integrity: sha512-NTZVKn9IylLwUzaKjkas1e4u2DLNcV4rdYagA4PWdPwW87Bi7z+BznyKSRwS/761tV/lzCGXplWsiaMjLqP2zQ==}
     hasBin: true
@@ -3998,6 +4055,15 @@ packages:
     hasBin: true
     dev: true
 
+  /prisma/4.11.0:
+    resolution: {integrity: sha512-4zZmBXssPUEiX+GeL0MUq/Yyie4ltiKmGu7jCJFnYMamNrrulTBc+D+QwAQSJ01tyzeGHlD13kOnqPwRipnlNw==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+    requiresBuild: true
+    dependencies:
+      '@prisma/engines': 4.11.0
+    dev: false
+
   /proc-log/2.0.1:
     resolution: {integrity: sha512-Kcmo2FhfDTXdcbfDH76N7uBYHINxc/8GW7UAVuVP9I+Va3uHSerrnKV6dLooga/gh7GlgzuCCr/eoldnL1muGw==}
     engines: {node: ^12.13.0 || ^14.15.0 || >=16.0.0}
@@ -4358,6 +4424,10 @@ packages:
     engines: {node: '>=8'}
     dev: true
 
+  /shell-quote/1.8.0:
+    resolution: {integrity: sha512-QHsz8GgQIGKlRi24yFc6a6lN69Idnx634w49ay6+jA5yFh7a1UY+4Rp6HPx/L/1zcEDPEij8cIsiqR6bQsE5VQ==}
+    dev: true
+
   /side-channel/1.0.4:
     resolution: {integrity: sha512-q5XPytqFEIKHkGdiMIrY10mvLRvnQh42/+GoBlFW3b2LXLE2xxJpZFdm94we0BaoV3RwJyGqg5wS7epxTv0Zvw==}
     dependencies:
@@ -4423,6 +4493,10 @@ packages:
   /source-map/0.6.1:
     resolution: {integrity: sha512-UjgapumWlbMhkBgzT7Ykc5YXUT46F0iKu8SGXq0bcwP5dz/h0Plj6enJqjz1Zbq2l5WaqYnrVbwWOWMyF3F47g==}
     engines: {node: '>=0.10.0'}
+    dev: true
+
+  /spawn-command/0.0.2-1:
+    resolution: {integrity: sha512-n98l9E2RMSJ9ON1AKisHzz7V42VDiBQGY6PB1BwRglz99wpVsSuGzQ+jOi6lFXBGVTCrRpltvjm+/XA+tpeJrg==}
     dev: true
 
   /spdx-correct/3.2.0:
@@ -4559,6 +4633,13 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       has-flag: 4.0.0
+
+  /supports-color/8.1.1:
+    resolution: {integrity: sha512-MpUEN2OodtUzxvKQl72cUF7RQ5EiHsGvSsVG0ia9c5RbWGL2CI4C7EpPS8UTBIplnlzZiNuV56w+FuNxy3ty2Q==}
+    engines: {node: '>=10'}
+    dependencies:
+      has-flag: 4.0.0
+    dev: true
 
   /supports-preserve-symlinks-flag/1.0.0:
     resolution: {integrity: sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==}

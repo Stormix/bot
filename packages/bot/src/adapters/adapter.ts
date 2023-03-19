@@ -13,6 +13,7 @@ abstract class Adapter<Context extends CommandContext> {
   abstract atAuthor(message: unknown): string;
   abstract createContext(message: unknown): Context;
   abstract send(context: Context, message: string): Promise<void>;
+  abstract stop(): Promise<void>;
 }
 
 export default Adapter;

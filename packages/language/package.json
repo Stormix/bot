@@ -2,16 +2,18 @@
   "name": "@bot/language",
   "version": "1.0.0",
   "description": "",
-  "main": "./dist/bin/index.js",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc && tsc-alias",
+    "build:watch": "tsc && (concurrently \"tsc -w\" \"tsc-alias -w\")",
     "start": "node dist/index.js",
     "dev": "ts-node-dev -r tsconfig-paths/register --respawn src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "exec": "ts-node -r tsconfig-paths/register src/bin/index.ts"
   },
   "bin": {
-    "tex": "./dist/bin/index.js"
+    "language": "./dist/bin/index.js"
   },
   "keywords": [],
   "author": "Anas Mazouni",
@@ -24,6 +26,7 @@
   "devDependencies": {
     "@types/node": "^18.15.3",
     "@types/yargs": "^17.0.22",
+    "concurrently": "^7.6.0",
     "ts-node": "^10.9.1",
     "ts-node-dev": "^2.0.0",
     "tsc-alias": "^1.8.3",

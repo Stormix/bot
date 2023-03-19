@@ -9,6 +9,7 @@ export enum CommandSource {
 }
 
 export interface CommandContext {
+  atOwner: string;
   source: CommandSource;
   atAuthor: string;
   adapter: TwitchAdapter | DiscordAdapter;

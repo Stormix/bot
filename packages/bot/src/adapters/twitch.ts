@@ -21,6 +21,7 @@ export default class TwitchAdapter extends Adapter<TwitchCommandContext> {
     return {
       source: CommandSource.Twitch,
       atAuthor: this.atAuthor(message),
+      atOwner: `@${this.bot.config.env.TWITCH_USERNAME}`,
       message,
       adapter: this
     };
@@ -56,10 +57,15 @@ export default class TwitchAdapter extends Adapter<TwitchCommandContext> {
 
       if (!command) return;
 
-      await this.bot.commandManager.evalCommand(command, args, this.createContext(message as PrivateMessage));
+      await this.bot.commandManager.run(command, args, this.createContext(message as PrivateMessage));
     });
 
     await this.client.connect();
     await this.client.join(this.bot.config.env.TWITCH_USERNAME);
+  }
+
+  async stop() {
+    if (!this.client) throw new Error('Twitch client is not initialized!');
+    await this.client.disconnect();
   }
 }

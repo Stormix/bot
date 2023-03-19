@@ -1,0 +1,23 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum CommandType {
+  STATIC
+  DYNAMIC
+}
+
+model Command {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  aliases String[]
+  response    String
+  name    String
+  type    CommandType @default(STATIC)
+  enabled Boolean     @default(true)
+  cooldown Int        @default(0)
+}

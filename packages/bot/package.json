@@ -8,7 +8,9 @@
     "build": "tsc && tsc-alias",
     "start": "node dist/index.js",
     "dev": "ts-node-dev -r tsconfig-paths/register --respawn src/index.ts",
-    "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix"
+    "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
+    "db:pull": "npx prisma db pull",
+    "db:gen": "npx prisma generate"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.191",
@@ -26,11 +28,14 @@
   },
   "dependencies": {
     "@bot/language": "workspace:^1.0.0",
+    "@prisma/client": "^4.11.0",
     "discord.js": "^14.8.0",
     "dotenv": "^16.0.3",
     "envalid": "^7.3.1",
     "glob": "^9.3.0",
     "lodash": "^4.17.21",
+    "node-graceful-shutdown": "^1.1.5",
+    "prisma": "^4.11.0",
     "reflect-metadata": "^0.1.13",
     "tslog": "^4.8.2",
     "twitch-js": "^2.0.0-beta.45"

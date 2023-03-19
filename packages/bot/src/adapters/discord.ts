@@ -21,6 +21,7 @@ export default class DiscordAdapter extends Adapter<DiscordCommandContext> {
     return {
       source: CommandSource.Discord,
       atAuthor: this.atAuthor(message),
+      atOwner: `<@${this.bot.config.env.DISCORD_OWNER_ID}>`,
       message,
       adapter: this
     };
@@ -59,8 +60,13 @@ export default class DiscordAdapter extends Adapter<DiscordCommandContext> {
 
       if (!command) return;
 
-      await this.bot.commandManager.evalCommand(command, args, this.createContext(message));
+      await this.bot.commandManager.run(command, args, this.createContext(message));
     });
     await this.client.login(this.bot.config.env.DISCORD_TOKEN);
+  }
+
+  async stop() {
+    if (!this.client) throw new Error('Discord client is not initialized!');
+    this.client.destroy();
   }
 }
