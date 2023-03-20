@@ -6,16 +6,16 @@ import fs, { existsSync } from 'fs';
 import yargs from 'yargs/yargs';
 import { evaluate } from '..';
 
-const args = yargs(process.argv.slice(2)).options({
-  debug: {
-    alias: 'd',
-    description: 'Will dump the AST to the console',
-  }
-})
+const args = yargs(process.argv.slice(2))
+  .options({
+    debug: {
+      alias: 'd',
+      description: 'Will dump the AST to the console'
+    }
+  })
   .parseSync();
 
 async function run() {
-
   const file = args._[0] as string;
   const debug = args.debug;
 
@@ -51,10 +51,9 @@ async function run() {
   if (debug) {
     for (let i = 0; i < exprs.length; i++) {
       exprs[i].dump();
-
     }
   } else {
-    const results = await evaluate(content, loop);
+    const results = await evaluate(exprs, loop);
   }
 }
 

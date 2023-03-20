@@ -1,7 +1,7 @@
-import { Expr } from "./lib/expression";
-import { parseAllExprs } from "./lib/parser";
-import { EvalContext, EvalScope } from "./lib/scoping";
-
+import type { Expr } from './lib/expression';
+import { parseAllExprs } from './lib/parser';
+import type { EvalScope } from './lib/scoping';
+import { EvalContext } from './lib/scoping';
 
 export const parse = (code: string) => {
   const formattedCode = code.replace(/\r?\n|\r/g, ''); // Remove newlines
@@ -12,11 +12,11 @@ export const parse = (code: string) => {
   }
 
   return exprs;
-}
+};
 
 export const evaluate = (exprs: Expr[], scope?: EvalScope) => {
   const context = new EvalContext(scope);
   const results = exprs.map((expr) => context.evalExpr(expr));
 
   return Promise.all(results);
-}
+};

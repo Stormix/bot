@@ -57,7 +57,7 @@ export default class TwitchAdapter extends Adapter<TwitchCommandContext> {
 
       if (!command) return;
 
-      await this.bot.commandManager.run(command, args, this.createContext(message as PrivateMessage));
+      await this.bot.processor.run(command, args, this.createContext(message as PrivateMessage));
     });
 
     await this.client.connect();

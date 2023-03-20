@@ -1,8 +1,8 @@
-import Command from '@/lib/command';
+import BuiltinCommand from '@/lib/command';
 import type { CommandContext, DiscordCommandContext, TwitchCommandContext } from '@/types/command';
 import { CommandSource } from '@/types/command';
 
-export default class PingCommand extends Command {
+export default class PingCommand extends BuiltinCommand {
   name = 'ping';
 
   async run(context: CommandContext) {

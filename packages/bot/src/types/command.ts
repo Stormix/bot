@@ -1,3 +1,4 @@
+import type { Command } from '@prisma/client';
 import type { Message } from 'discord.js';
 import type { PrivateMessage } from 'twitch-js';
 import type DiscordAdapter from '../adapters/discord';
@@ -25,3 +26,5 @@ export interface DiscordCommandContext extends CommandContext {
   adapter: DiscordAdapter;
   message: Message;
 }
+
+export type BuiltinCommandOptions = Omit<Command, 'id' | 'response' | 'type' | 'name'>;

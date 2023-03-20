@@ -60,7 +60,7 @@ export default class DiscordAdapter extends Adapter<DiscordCommandContext> {
 
       if (!command) return;
 
-      await this.bot.commandManager.run(command, args, this.createContext(message));
+      await this.bot.processor.run(command, args, this.createContext(message));
     });
     await this.client.login(this.bot.config.env.DISCORD_TOKEN);
   }
