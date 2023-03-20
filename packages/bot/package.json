@@ -10,7 +10,9 @@
     "dev": "ts-node-dev -r tsconfig-paths/register --respawn src/index.ts",
     "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
     "db:pull": "npx prisma db pull",
-    "db:gen": "npx prisma generate"
+    "db:gen": "npx prisma generate",
+    "postinstall": "npm run db:gen",
+    "prebuild": "rm -rf dist && mkdir dist"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.191",

@@ -28,7 +28,7 @@ export default class Processor {
   }
 
   async load() {
-    const commands = await loadModulesInDirectory<Constructor<BuiltinCommand>>('./src/commands');
+    const commands = await loadModulesInDirectory<Constructor<BuiltinCommand>>('commands');
     for (const Command of commands) {
       this.register(new Command(this.bot));
     }
