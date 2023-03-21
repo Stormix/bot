@@ -37,18 +37,18 @@ class Bot {
   async setup() {
     this.logger.debug('Setting up bot...');
 
-    // Load adapters
-    this.logger.info('Loading adapters...');
-    const adapters = await loadModulesInDirectory<Constructor<Adapter<CommandContext>>>('adapters');
-    for (const Adapter of adapters) {
-      this.adapters.push(new Adapter(this));
-    }
-
     // Load hooks
     this.logger.info('Loading hooks...');
     const hooks = await loadModulesInDirectory<Constructor<Hook>>('hooks');
     for (const Hook of hooks) {
       this.hooks.push(new Hook(this));
+    }
+
+    // Load adapters
+    this.logger.info('Loading adapters...');
+    const adapters = await loadModulesInDirectory<Constructor<Adapter<CommandContext>>>('adapters');
+    for (const Adapter of adapters) {
+      this.adapters.push(new Adapter(this));
     }
 
     // Setup adapters
@@ -70,7 +70,7 @@ class Bot {
       await adapter.listen();
     }
     for (const hook of this.hooks) {
-      await hook.onStart();
+      await hook.onReady();
     }
   }
 

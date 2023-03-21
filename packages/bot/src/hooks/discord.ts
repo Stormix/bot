@@ -5,6 +5,9 @@ import { ActivityType } from 'discord.js';
 
 export default class DiscordHook extends Hook {
   async onStart() {
+    // Do nothing
+  }
+  async onReady() {
     // Get the discord adapter
     const adapter = this.bot.adapters.find((adapter) => adapter.name === Adapters.Discord);
     if (!adapter) {
