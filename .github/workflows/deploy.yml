@@ -18,7 +18,7 @@ jobs:
         run: pnpm install
       - name: Deploy
         run: caprover deploy -h ${{ secrets.CAPROVER_SERVER_PROD }} -p ${{ secrets.CAPROVER_PASSWORD_PROD }} -a bot -b main
-      - name: "Version "
+      - name: "Version"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -26,4 +26,13 @@ jobs:
           git config user.email "${{ github.actor}}@users.noreply.github.com"
 
 
+          cd ../../
           pnpm lerna version --conventional-commits --yes
+
+
+          cd packages/bot
+          pnpm run genversion
+
+          git add .
+          git commit -m "chore: update version.ts [skip ci]"
+          git push

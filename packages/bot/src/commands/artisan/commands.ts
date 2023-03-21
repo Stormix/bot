@@ -76,7 +76,7 @@ export default class CommandsCommand extends BuiltinCommand {
   async help(context: CommandContext): Promise<void> {
     return context.adapter.send(
       context,
-      `Usage: ${context.atAuthor} ${this.name} <list|enable|disable|add|remove|edit|help>`
+      `Usage: ${context.atAuthor} -> ${this.name} <list|enable|disable|add|remove|edit|help>`
     );
   }
 }
