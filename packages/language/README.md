@@ -1,4 +1,4 @@
-# Tex
+# Bot Language
 
 
 A simple Interpreted Dynamic Programming Language for describing chat bot commands and behavior... now in typescript! (Inspired by [Bex](https://gitlab.com/tsoding/bex))
