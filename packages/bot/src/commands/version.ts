@@ -14,6 +14,9 @@ export default class VersionCommand extends BuiltinCommand {
   }
 
   async run(context: CommandContext) {
-    return context.adapter.send(context, `I am currently running version ${this.bot.config.version} | `);
+    return context.adapter.send(
+      context,
+      `I am currently running version **${this.bot.config.version}** \n > https://github.com/Stormix/bot/releases/tag/v${this.bot.config.version}\n`
+    );
   }
 }
