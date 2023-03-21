@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.3.0 (2023-03-21)
+
+### Features
+
+- a whole api (why not ¯\_(ツ)\_/¯) ([c1f82ff](https://github.com/Stormix/bot/commit/c1f82ffa442182cca8444e287c5e43bc2ee9daeb))
+
 ## 1.2.3 (2023-03-21)
 
 **Note:** Version bump only for package root
