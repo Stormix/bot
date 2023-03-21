@@ -1,13 +1,15 @@
 import type Bot from '@/lib/bot';
+import { Adapters } from '@/types/adapter';
 import type { DiscordCommandContext } from '@/types/command';
 import { CommandSource } from '@/types/command';
 import type { Message } from 'discord.js';
 import { Client, Events, GatewayIntentBits } from 'discord.js';
 import type { Context } from 'vm';
-import Adapter from './adapter';
+import Adapter from '../lib/adapter';
 
 export default class DiscordAdapter extends Adapter<DiscordCommandContext> {
   private client: Client | null = null;
+  name = Adapters.Discord;
 
   constructor(bot: Bot) {
     super(bot);
@@ -25,6 +27,11 @@ export default class DiscordAdapter extends Adapter<DiscordCommandContext> {
       message,
       adapter: this
     };
+  }
+
+  getClient() {
+    if (!this.client) throw new Error('Discord client is not initialized!');
+    return this.client;
   }
 
   async send(context: Context, message: string) {

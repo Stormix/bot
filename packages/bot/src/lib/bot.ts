@@ -1,15 +1,19 @@
-import DiscordAdapter from '@/adapters/discord';
-import TwitchAdapter from '@/adapters/twitch';
 import type { BotConfig } from '@/config/bot';
 import { defaultConfig } from '@/config/bot';
+import type Adapter from '@/lib/adapter';
+import type { CommandContext } from '@/types/command';
+import type { Constructor } from '@/types/generics';
+import { loadModulesInDirectory } from '@/utils/loaders';
 import { PrismaClient } from '@prisma/client';
 import Artisan from './artisan';
+import type Hook from './hook';
 import Logger from './logger';
 import Processor from './processor';
 
 class Bot {
   readonly config: BotConfig = defaultConfig;
-  private readonly adapters = [new TwitchAdapter(this), new DiscordAdapter(this)];
+  readonly adapters: Adapter<CommandContext>[] = [];
+  private readonly hooks: Hook[] = [];
 
   public readonly processor: Processor;
   public readonly logger: Logger;
@@ -32,9 +36,27 @@ class Bot {
    */
   async setup() {
     this.logger.debug('Setting up bot...');
+
+    // Load adapters
+    this.logger.info('Loading adapters...');
+    const adapters = await loadModulesInDirectory<Constructor<Adapter<CommandContext>>>('adapters');
+    for (const Adapter of adapters) {
+      this.adapters.push(new Adapter(this));
+    }
+
+    // Load hooks
+    this.logger.info('Loading hooks...');
+    const hooks = await loadModulesInDirectory<Constructor<Hook>>('hooks');
+    for (const Hook of hooks) {
+      this.hooks.push(new Hook(this));
+    }
+
+    // Setup adapters
     for (const adapter of this.adapters) {
       await adapter.setup();
     }
+
+    // Setup db
     this.logger.info('Connecting to database...');
     await this.prisma.$connect();
   }
@@ -47,6 +69,9 @@ class Bot {
     for (const adapter of this.adapters) {
       await adapter.listen();
     }
+    for (const hook of this.hooks) {
+      await hook.onStart();
+    }
   }
 
   /**
@@ -58,6 +83,10 @@ class Bot {
     this.logger.info('Disconnecting from adapters...');
     for (const adapter of this.adapters) {
       await adapter.stop();
+    }
+
+    for (const hook of this.hooks) {
+      await hook.onStop();
     }
 
     this.logger.info('Disconnect from database...');

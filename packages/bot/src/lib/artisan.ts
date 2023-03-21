@@ -57,13 +57,12 @@ export default class Artisan {
       const artisanCommand = this.commands.find((c) => c.isCommand(command));
       if (!artisanCommand) throw new ValidationError('Unknown artisan command');
 
-      await artisanCommand.run(context, args);
-
-      return context.adapter.send(context, `Running artisan command: ${command} ${args.join(' ')}`);
+      return artisanCommand.run(context, args);
     } catch (error) {
       if (error instanceof ValidationError) {
         return context.adapter.send(context, error.message);
       }
+      this.logger.error('Failed to run artisan command. ', error);
       return context.adapter.send(
         context,
         `Failed to run artisan command. ${context.atOwner} check logs for more info.`

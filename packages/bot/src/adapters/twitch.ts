@@ -1,13 +1,16 @@
 import type Bot from '@/lib/bot';
+import { Adapters } from '@/types/adapter';
 import type { TwitchCommandContext } from '@/types/command';
 import { CommandSource } from '@/types/command';
 import type { PrivateMessage } from 'twitch-js';
 import { Chat, ChatEvents, Commands } from 'twitch-js';
+import fetchUtil from 'twitch-js/lib/utils/fetch';
 import type { Context } from 'vm';
-import Adapter from './adapter';
+import Adapter from '../lib/adapter';
 
 export default class TwitchAdapter extends Adapter<TwitchCommandContext> {
   client: Chat | null = null;
+  name = Adapters.Twitch;
 
   constructor(bot: Bot) {
     super(bot);
@@ -27,6 +30,11 @@ export default class TwitchAdapter extends Adapter<TwitchCommandContext> {
     };
   }
 
+  getClient() {
+    if (!this.client) throw new Error('Twitch client is not initialized!');
+    return this.client;
+  }
+
   async send(context: Context, message: string): Promise<void> {
     if (!this.client) throw new Error('Twitch client is not initialized!');
     await this.client.say(context.message.channel, message);
@@ -36,7 +44,16 @@ export default class TwitchAdapter extends Adapter<TwitchCommandContext> {
     this.client = new Chat({
       username: this.bot.config.env.TWITCH_USERNAME,
       token: this.bot.config.env.TWITCH_ACCESS_TOKEN,
-      // TODO: setup refresh token mechanism
+      onAuthenticationFailure: () =>
+        fetchUtil('https://id.twitch.tv/oauth2/token', {
+          method: 'post',
+          search: {
+            grant_type: 'refresh_token',
+            refresh_token: this.bot.config.env.TWITCH_REFRESH_TOKEN,
+            client_id: this.bot.config.env.TWITCH_CLIENT_ID,
+            client_secret: this.bot.config.env.TWITCH_CLIENT_SECRET
+          }
+        }).then((response) => response.accessToken),
       log: { level: 'error' }
     });
   }
@@ -61,7 +78,7 @@ export default class TwitchAdapter extends Adapter<TwitchCommandContext> {
     });
 
     await this.client.connect();
-    await this.client.join(this.bot.config.env.TWITCH_USERNAME);
+    await this.client.join(this.bot.config.env.TWITCH_CHANNEL);
   }
 
   async stop() {
