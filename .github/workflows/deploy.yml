@@ -16,8 +16,6 @@ jobs:
         run: npm install -g pnpm caprover
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - name: Deploy
-        run: caprover deploy -h ${{ secrets.CAPROVER_SERVER_PROD }} -p ${{ secrets.CAPROVER_PASSWORD_PROD }} -a bot -b main
       - name: "Version"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -25,10 +23,7 @@ jobs:
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor}}@users.noreply.github.com"
 
-
-          cd ../../
           pnpm lerna version --conventional-commits --yes
-
 
           cd packages/bot
           pnpm run genversion
@@ -36,3 +31,6 @@ jobs:
           git add .
           git commit -m "chore: update version.ts [skip ci]"
           git push
+
+      - name: Deploy
+        run: caprover deploy -h ${{ secrets.CAPROVER_SERVER_PROD }} -p ${{ secrets.CAPROVER_PASSWORD_PROD }} -a bot -b main
