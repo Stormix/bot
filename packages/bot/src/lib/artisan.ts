@@ -1,9 +1,15 @@
 import { ArtisanCommands } from '@/types/artisan';
 import type { CommandContext } from '@/types/command';
+import type { Constructor } from '@/types/generics';
+import { loadModulesInDirectory } from '@/utils/loaders';
 import type Bot from './bot';
+import type BuiltinCommand from './command';
 import { ValidationError } from './errors';
 
 export default class Artisan {
+  private readonly logger = this.bot.logger.getSubLogger({ name: this.constructor.name });
+  private commands: BuiltinCommand[] = [];
+
   /**
    * The artisan class - a utility class to control/configure the bot
    * @param bot The bot instance
@@ -23,6 +29,20 @@ export default class Artisan {
   }
 
   /**
+   * Loads the artisan commands
+   */
+  async load() {
+    // Load artisan commands
+    const commands = await loadModulesInDirectory<Constructor<BuiltinCommand>>('commands/artisan');
+
+    // Register artisan commands
+    commands.forEach((Command) => {
+      this.commands.push(new Command(this.bot));
+    });
+
+    this.logger.info(`Loaded ${this.commands.length} artisan commands.`);
+  }
+  /**
    * Runs the artisan command
    *
    * @param command  The artisan command to run
@@ -33,6 +53,11 @@ export default class Artisan {
   async run(command: string, args: string[], context: CommandContext): Promise<void> {
     try {
       await this.validate(command, args, context);
+
+      const artisanCommand = this.commands.find((c) => c.isCommand(command));
+      if (!artisanCommand) throw new ValidationError('Unknown artisan command');
+
+      await artisanCommand.run(context, args);
 
       return context.adapter.send(context, `Running artisan command: ${command} ${args.join(' ')}`);
     } catch (error) {

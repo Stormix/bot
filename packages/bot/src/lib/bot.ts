@@ -21,10 +21,10 @@ class Bot {
    */
   constructor() {
     this.logger = new Logger();
-    this.artisan = new Artisan(this);
     this.processor = new Processor(this);
-
     this.processor.load();
+    this.artisan = new Artisan(this);
+    this.artisan.load();
   }
 
   /**

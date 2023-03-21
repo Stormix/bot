@@ -32,7 +32,7 @@ export default class Processor {
     for (const Command of commands) {
       this.register(new Command(this.bot));
     }
-    this.logger.debug(`Loaded ${this.commands.length} commands!`);
+    this.logger.debug(`Loaded ${this.commands.length} bot commands.`);
   }
 
   async run<Context extends CommandContext>(keyword: string, args: string[], context: Context) {
