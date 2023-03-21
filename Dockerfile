@@ -1,5 +1,6 @@
-FROM node:18-alpine AS base
+FROM node:18-slim AS base
 
+RUN apt-get update || : && apt-get install python -y
 RUN npm i -g pnpm
 
 FROM base AS dependencies
