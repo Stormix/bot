@@ -1,10 +1,10 @@
 import * as dotenv from 'dotenv';
-import { cleanEnv, str } from 'envalid';
+import { bool, cleanEnv, str } from 'envalid';
 
 dotenv.config();
 
 const env = cleanEnv(process.env, {
-  ENABLED: str({ default: 'true' }),
+  ENABLED: bool({ default: true }),
   NODE_ENV: str({ default: 'development' }),
   SENTRY_DSN: str({ default: '' }),
   TWITCH_CLIENT_ID: str(),
