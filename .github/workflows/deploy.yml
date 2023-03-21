@@ -15,7 +15,7 @@ jobs:
       - name: Install pnpm and caprover
         run: npm install -g pnpm caprover
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
       - name: Deploy
         run: caprover deploy -h ${{ secrets.CAPROVER_SERVER_PROD }} -p ${{ secrets.CAPROVER_PASSWORD_PROD }} -a bot -b main
       - name: "Version"
