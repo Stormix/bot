@@ -28,7 +28,7 @@ export default class CommandsCommand extends BuiltinCommand {
    * Lists all commands
    * @param context The context of the command (e.g. twitch or discord context)
    */
-  list(context: CommandContext): void | PromiseLike<void> {
+  async list(context: CommandContext): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
@@ -38,7 +38,7 @@ export default class CommandsCommand extends BuiltinCommand {
    * @param command The command to enable/disable
    * @param value Whether to enable or disable the command
    */
-  toggle(context: CommandContext, command: string, value: boolean): void | PromiseLike<void> {
+  async toggle(context: CommandContext, command: string, value: boolean): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
@@ -47,7 +47,7 @@ export default class CommandsCommand extends BuiltinCommand {
    * @param context The context of the command (e.g. twitch or discord context)
    * @param arg1
    */
-  add(context: CommandContext, args: string[]): void | PromiseLike<void> {
+  async add(context: CommandContext, args: string[]): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
@@ -56,7 +56,7 @@ export default class CommandsCommand extends BuiltinCommand {
    * @param context The context of the command (e.g. twitch or discord context)
    * @param command  The command to remove
    */
-  remove(context: CommandContext, command: string): void | PromiseLike<void> {
+  async remove(context: CommandContext, command: string): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
@@ -65,7 +65,7 @@ export default class CommandsCommand extends BuiltinCommand {
    * @param context The context of the command (e.g. twitch or discord context)
    * @param arg1
    */
-  edit(context: CommandContext, args: string[]): void | PromiseLike<void> {
+  async edit(context: CommandContext, args: string[]): Promise<void> {
     throw new Error('Method not implemented.');
   }
 
@@ -73,7 +73,7 @@ export default class CommandsCommand extends BuiltinCommand {
    * Displays help for the command
    * @param context The context of the command (e.g. twitch or discord context)
    */
-  help(context: CommandContext): void | PromiseLike<void> {
+  async help(context: CommandContext): Promise<void> {
     return context.adapter.send(
       context.message,
       `Usage: ${context.atAuthor} ${this.name} <list|enable|disable|add|remove|edit|help>`
