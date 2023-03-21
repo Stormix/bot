@@ -1,13 +1,17 @@
 import type Bot from '@/lib/bot';
 import type { Adapters } from '@/types/adapter';
 import type { CommandContext } from '../types/command';
+import type Logger from './logger';
 
 abstract class Adapter<Context extends CommandContext> {
   protected bot: Bot;
-  abstract name: Adapters;
+  name: Adapters;
+  logger: Logger;
 
-  constructor(bot: Bot) {
+  constructor(bot: Bot, name: Adapters) {
     this.bot = bot;
+    this.name = name;
+    this.logger = this.bot.logger.getSubLogger({ name: this.name });
   }
 
   abstract getClient(): unknown;

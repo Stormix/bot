@@ -1,11 +1,11 @@
 import * as dotenv from 'dotenv';
-import { bool, cleanEnv, str } from 'envalid';
+import { bool, cleanEnv, port, str } from 'envalid';
 
 dotenv.config();
 
 const env = cleanEnv(process.env, {
   ENABLED: bool({ default: true }),
-  NODE_ENV: str({ default: 'development' }),
+  NODE_ENV: str({ default: 'development', choices: ['development', 'test', 'production', 'staging'] }),
   SENTRY_DSN: str({ default: '' }),
   TWITCH_CLIENT_ID: str(),
   TWITCH_CLIENT_SECRET: str(),
@@ -20,7 +20,8 @@ const env = cleanEnv(process.env, {
   DISCORD_TOKEN: str(),
   DISCORD_GUILD_ID: str(),
   DISCORD_OWNER_ID: str(),
-  DATABASE_URL: str()
+  DATABASE_URL: str(),
+  PORT: port({ default: 3000 })
 });
 
 export type Env = typeof env;

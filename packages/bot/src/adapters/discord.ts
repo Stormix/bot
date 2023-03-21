@@ -9,10 +9,9 @@ import Adapter from '../lib/adapter';
 
 export default class DiscordAdapter extends Adapter<DiscordCommandContext> {
   private client: Client | null = null;
-  name = Adapters.Discord;
 
   constructor(bot: Bot) {
-    super(bot);
+    super(bot, Adapters.Discord);
   }
 
   atAuthor(message: Message) {
@@ -69,6 +68,14 @@ export default class DiscordAdapter extends Adapter<DiscordCommandContext> {
 
       await this.bot.processor.run(command, args, this.createContext(message));
     });
+
+    this.client.on(Events.Warn, (warn) => {
+      this.logger.warn(warn);
+    });
+    this.client.on(Events.Error, (error) => {
+      this.logger.error(error);
+    });
+
     await this.client.login(this.bot.config.env.DISCORD_TOKEN);
   }
 

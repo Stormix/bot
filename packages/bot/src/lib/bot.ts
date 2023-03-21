@@ -1,3 +1,4 @@
+import App from '@/api/app';
 import type { BotConfig } from '@/config/bot';
 import { defaultConfig } from '@/config/bot';
 import type Adapter from '@/lib/adapter';
@@ -19,6 +20,7 @@ class Bot {
   public readonly logger: Logger;
   public readonly prisma: PrismaClient = new PrismaClient();
   public readonly artisan: Artisan;
+  public readonly api: App;
 
   /**
    * Creates a new bot instance
@@ -26,9 +28,8 @@ class Bot {
   constructor() {
     this.logger = new Logger();
     this.processor = new Processor(this);
-    this.processor.load();
     this.artisan = new Artisan(this);
-    this.artisan.load();
+    this.api = new App(this, []);
   }
 
   /**
@@ -36,6 +37,9 @@ class Bot {
    */
   async setup() {
     this.logger.debug('Setting up bot...');
+
+    await this.processor.load();
+    await this.artisan.load();
 
     // Load hooks
     this.logger.info('Loading hooks...');
@@ -69,9 +73,12 @@ class Bot {
     for (const adapter of this.adapters) {
       await adapter.listen();
     }
+
     for (const hook of this.hooks) {
       await hook.onReady();
     }
+
+    await this.api.listen();
   }
 
   /**

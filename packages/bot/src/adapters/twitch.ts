@@ -10,10 +10,9 @@ import Adapter from '../lib/adapter';
 
 export default class TwitchAdapter extends Adapter<TwitchCommandContext> {
   client: Chat | null = null;
-  name = Adapters.Twitch;
 
   constructor(bot: Bot) {
-    super(bot);
+    super(bot, Adapters.Twitch);
   }
 
   atAuthor(message: PrivateMessage) {
