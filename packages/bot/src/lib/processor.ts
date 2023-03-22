@@ -70,6 +70,13 @@ export default class Processor {
         return context.adapter.send(context, `${context.atOwner} probably forgot to add a response to this command!`);
       if (!command.enabled) return context.adapter.send(context, `${context.atAuthor} this command is disabled!`);
 
+      if (command.ownerOnly && !context.adapter.isOwner(context.message)) {
+        return context.adapter.send(
+          context,
+          `${context.atAuthor} this command can only be used by ${context.atOwner}! Do it one more time and I'll ban you!`
+        );
+      }
+
       switch (command.type) {
         case CommandType.STATIC:
           return context.adapter.send(context, command.response);
@@ -90,7 +97,8 @@ export default class Processor {
           return context.adapter.send(context, `${context.atOwner} this command has an invalid type!`);
       }
     } catch (error) {
-      this.logger.error(`Error while running command ${keyword} from ${context.atAuthor}!`, error);
+      this.logger.error(`Error while running command ${keyword} from ${context.atAuthor}!`);
+      this.logger.error(error);
       await context.adapter.send(
         context,
         `${context.atAuthor} could not run this command! Ask ${context.atOwner} to check the logs!`

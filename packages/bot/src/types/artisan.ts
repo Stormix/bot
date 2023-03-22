@@ -1,3 +1,4 @@
 export enum ArtisanCommands {
-  Commands = 'commands'
+  Commands = 'commands',
+  Config = 'config'
 }

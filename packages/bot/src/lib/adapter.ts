@@ -4,7 +4,7 @@ import type { CommandContext } from '../types/command';
 import type Logger from './logger';
 
 abstract class Adapter<Context extends CommandContext> {
-  protected bot: Bot;
+  readonly bot: Bot;
   name: Adapters;
   logger: Logger;
 
@@ -20,6 +20,7 @@ abstract class Adapter<Context extends CommandContext> {
   abstract atAuthor(message: unknown): string;
   abstract createContext(message: unknown): Context;
   abstract send(context: Context, message: string): Promise<void>;
+  abstract isOwner(message: unknown): boolean;
   abstract stop(): Promise<void>;
 }
 

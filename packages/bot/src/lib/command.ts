@@ -17,7 +17,7 @@ abstract class BuiltinCommand {
   constructor(bot: Bot, options?: BuiltinCommandOptions) {
     this.bot = bot;
     this.logger = bot.logger.getSubLogger({ name: this.constructor.name });
-    this.options = options || {
+    this.options = options ?? {
       enabled: true,
       aliases: [],
       cooldown: 0
@@ -30,7 +30,7 @@ abstract class BuiltinCommand {
    * @returns
    */
   public isCommand(command: string): boolean {
-    return this.name === command || this.options.aliases.includes(command);
+    return this.name === command || !!this.options.aliases?.includes(command);
   }
 
   /**

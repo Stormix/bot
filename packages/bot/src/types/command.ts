@@ -27,4 +27,4 @@ export interface DiscordCommandContext extends CommandContext {
   message: Message;
 }
 
-export type BuiltinCommandOptions = Omit<Command, 'id' | 'response' | 'type' | 'name'>;
+export type BuiltinCommandOptions = Partial<Omit<Command, 'id' | 'response' | 'type' | 'name'>>;

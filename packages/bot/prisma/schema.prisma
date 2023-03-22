@@ -20,4 +20,11 @@ model Command {
   type    CommandType @default(STATIC)
   enabled Boolean     @default(true)
   cooldown Int        @default(0)
+  ownerOnly Boolean   @default(false)
+}
+
+model Setting {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  name    String
+  value   String
 }

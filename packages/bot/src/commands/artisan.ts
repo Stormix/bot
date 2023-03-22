@@ -9,8 +9,13 @@ export default class ArtisanCommand extends BuiltinCommand {
     super(bot, {
       aliases: ['config'],
       cooldown: 0,
-      enabled: true
+      enabled: true,
+      ownerOnly: true
     });
+  }
+
+  get artisan() {
+    return this.bot.artisan;
   }
 
   async run(context: CommandContext, args: string[]) {
@@ -20,7 +25,7 @@ export default class ArtisanCommand extends BuiltinCommand {
       return context.adapter.send(context, 'Please specify a command to run');
     }
     try {
-      return this.bot.artisan.run(command, commandArgs, context);
+      return this.artisan.run(command, commandArgs, context);
     } catch (error) {
       this.logger.error('Failed to run artisan command.', error);
       return context.adapter.send(

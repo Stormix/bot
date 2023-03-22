@@ -1,6 +1,6 @@
 import type Bot from '@/lib/bot';
 import { Adapters } from '@/types/adapter';
-import type { TwitchCommandContext } from '@/types/command';
+import type { CommandContext, TwitchCommandContext } from '@/types/command';
 import { CommandSource } from '@/types/command';
 import type { PrivateMessage } from 'twitch-js';
 import { Chat, ChatEvents, Commands } from 'twitch-js';
@@ -17,6 +17,11 @@ export default class TwitchAdapter extends Adapter<TwitchCommandContext> {
 
   atAuthor(message: PrivateMessage) {
     return `@${message.username}`;
+  }
+
+  isOwner(message: CommandContext['message']) {
+    const username = (message as PrivateMessage).username;
+    return username === this.bot.config.env.TWITCH_USERNAME;
   }
 
   createContext(message: PrivateMessage): TwitchCommandContext {
