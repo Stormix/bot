@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.4.0 (2023-03-22)
+
+### Features
+
+- dynamic bot config ([80581b3](https://github.com/Stormix/bot/commit/80581b3183ce8ddec3672e4cb6e9bd543c23f743))
+
 ## 1.3.1 (2023-03-22)
 
 **Note:** Version bump only for package @bot/language
