@@ -2,6 +2,7 @@ import BuiltinCommand from '@/lib/command';
 import { ArtisanCommands } from '@/types/artisan';
 import type { CommandContext } from '@/types/command';
 import { formatCommand } from '@/utils/format';
+import { parseCreateCommandArgs } from '@/utils/parser';
 import { CommandType } from '@prisma/client';
 
 export default class CommandsCommand extends BuiltinCommand {
@@ -95,10 +96,11 @@ export default class CommandsCommand extends BuiltinCommand {
   async add(context: CommandContext, args: string[]): Promise<void> {
     if (args.length < 3) return this.help(context);
 
-    const command = args[1];
-    const response = args[2];
-    const isCode = response.startsWith('```') && response.endsWith('```');
-    const cooldown = args[3] ? parseInt(args[3]) : 0;
+    const { command, response, allArgs, isCode } = parseCreateCommandArgs(args);
+    const cooldown = allArgs
+      .replace(response, '')
+      .replaceAll(/['"`]+/g, '')
+      .trim();
 
     // Check if command already exists
     const existingCommand = await this.bot.prisma.command.findFirst({
@@ -124,9 +126,10 @@ export default class CommandsCommand extends BuiltinCommand {
         name: command,
         type: isCode ? CommandType.DYNAMIC : CommandType.STATIC,
         enabled: true,
-        cooldown
+        cooldown: isNaN(Number(cooldown)) ? 0 : Number(cooldown)
       }
     });
+
     return context.adapter.send(context, `Added command ${formatCommand(command, this.bot)}`);
   }
 
@@ -172,11 +175,7 @@ export default class CommandsCommand extends BuiltinCommand {
    */
   async edit(context: CommandContext, args: string[]): Promise<void> {
     if (args.length < 3) return this.help(context);
-    if (args[3]) context.adapter.send(context, 'Cooldown cannot be edited, will be ignored.');
-
-    const command = args[1];
-    const response = args[2];
-    const isCode = response.startsWith('```') && response.endsWith('```');
+    const { command, response, isCode } = parseCreateCommandArgs(args);
 
     // Check if command exists
     const existingCommand = await this.bot.prisma.command.findFirst({

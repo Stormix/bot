@@ -40,7 +40,7 @@ export default class Processor {
       if (this.commands.length === 0) await this.load();
 
       this.logger.debug(
-        `Evaluating command ${keyword} with args ${args.join(', ')}from`,
+        `Evaluating command ${keyword} with args ${args.join(', ')} from`,
         omit(context, 'adapter', 'message')
       );
 

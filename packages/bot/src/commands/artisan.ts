@@ -19,7 +19,7 @@ export default class ArtisanCommand extends BuiltinCommand {
   }
 
   async run(context: CommandContext, args: string[]) {
-    this.logger.debug('artisan command called');
+    this.logger.debug('Artisan command called');
     const [command, ...commandArgs] = args;
     if (!command) {
       return context.adapter.send(context, 'Please specify a command to run');
