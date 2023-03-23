@@ -1,4 +1,4 @@
-FROM node:18-slim AS base
+FROM node:19-slim AS base
 
 RUN apt-get update || : && apt-get install python -y
 RUN npm i -g pnpm
