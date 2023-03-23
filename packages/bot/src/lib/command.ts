@@ -9,6 +9,18 @@ abstract class BuiltinCommand {
 
   abstract name: string;
 
+  get ownerOnly(): boolean {
+    return this.options.ownerOnly ?? false;
+  }
+
+  get enabled(): boolean {
+    return this.options.enabled ?? true;
+  }
+
+  get cooldown(): number {
+    return this.options.cooldown ?? 0;
+  }
+
   /**
    * Creates a new builtin command
    * @param bot - The bot instance

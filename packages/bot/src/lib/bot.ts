@@ -12,12 +12,13 @@ import Artisan from './artisan';
 import type Hook from './hook';
 import Logger from './logger';
 import Processor from './processor';
+import type Storage from './storage';
 
 class Bot {
   config: BotConfig = defaultConfig;
   adapters: Adapter<CommandContext>[] = [];
   hooks: Hook[] = [];
-  storage: Storage[] = [];
+  storages: Storage[] = [];
 
   public readonly processor: Processor;
   public readonly logger: Logger;
@@ -37,6 +38,12 @@ class Bot {
 
   get prefix() {
     return this.config.prefix;
+  }
+
+  get storage() {
+    const primaryStorage = this.storages.find((s) => s.primary);
+    if (!primaryStorage) throw new Error('No primary storage found');
+    return primaryStorage;
   }
 
   /**
@@ -101,8 +108,13 @@ class Bot {
   async loadStorage() {
     // Load storage
     this.logger.info('Loading storage...');
-    const storage = await loadModulesInDirectory<Constructor<Storage>>('storage');
-    this.storage = storage.map((Storage) => new Storage(this));
+    const storages = await loadModulesInDirectory<Constructor<Storage>>('storage');
+    this.storages = storages.map((Storage) => new Storage(this));
+
+    // Setup adapters
+    for (const storage of this.storages) {
+      await storage.setup();
+    }
   }
 
   /**

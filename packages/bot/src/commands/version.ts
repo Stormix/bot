@@ -8,7 +8,7 @@ export default class VersionCommand extends BuiltinCommand {
   constructor(bot: Bot) {
     super(bot, {
       aliases: ['v'],
-      cooldown: 0,
+      cooldown: 10,
       enabled: true
     });
   }

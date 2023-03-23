@@ -1,10 +1,13 @@
 import type Bot from '@/lib/bot';
+import Logger from '@/lib/logger';
 import { StorageTypes } from '@/types/storage';
 import { createClient } from 'redis';
 import Storage from '../lib/storage';
 
 class RedisStorage extends Storage {
+  primary = true;
   client: ReturnType<typeof createClient>;
+  logger: Logger;
 
   constructor(bot: Bot) {
     super(StorageTypes.Redis, bot);
@@ -14,14 +17,31 @@ class RedisStorage extends Storage {
       username: bot.config.env.REDIS_USERNAME,
       password: bot.config.env.REDIS_PASSWORD
     });
+
+    this.logger = new Logger({ name: 'RedisStorage' });
   }
 
-  set(key: string, value: string) {
-    return this.client.set(`${this.prefix}${key}`, value);
+  async setup() {
+    await this.client.connect();
   }
 
-  get(key: string) {
-    return this.client.get(`${this.prefix}${key}`);
+  async set(key: string, value: string, expiry?: number) {
+    try {
+      await this.client.set(`${this.prefix}${key}`, value, {
+        EX: expiry ?? 0
+      });
+    } catch (error) {
+      this.logger.error('Failed to set key', error);
+    }
+  }
+
+  async get(key: string) {
+    try {
+      return this.client.get(`${this.prefix}${key}`);
+    } catch (error) {
+      this.logger.error('Failed to get key', error);
+      return null;
+    }
   }
 }
 

@@ -1,4 +1,5 @@
 import type { Constructor } from '@/types/generics';
+import { checkCommandCooldown, checkCommandFlags } from '@/utils/commands';
 import { loadModulesInDirectory } from '@/utils/loaders';
 import { CommandType } from '@prisma/client';
 import { omit } from 'lodash';
@@ -46,9 +47,14 @@ export default class Processor {
 
       // Check for built-in commands
       const commandInstance = this.get(keyword);
+
       if (commandInstance) {
-        await commandInstance.run(context, args);
-        return;
+        let error = checkCommandFlags(commandInstance, context);
+        if (error) return context.adapter.send(context, error);
+        // Hash command and check for cooldown
+        error = await checkCommandCooldown(commandInstance, context);
+        if (error) return context.adapter.send(context, error);
+        return commandInstance.run(context, args);
       }
 
       // Check for custom commands
@@ -66,16 +72,15 @@ export default class Processor {
         );
       }
 
-      if (!command?.response)
+      if (!command?.response) {
         return context.adapter.send(context, `${context.atOwner} probably forgot to add a response to this command!`);
-      if (!command.enabled) return context.adapter.send(context, `${context.atAuthor} this command is disabled!`);
-
-      if (command.ownerOnly && !context.adapter.isOwner(context.message)) {
-        return context.adapter.send(
-          context,
-          `${context.atAuthor} this command can only be used by ${context.atOwner}! Do it one more time and I'll ban you!`
-        );
       }
+
+      let error = checkCommandFlags(command, context);
+      if (error) return context.adapter.send(context, error);
+      // Hash command and check for cooldown
+      error = await checkCommandCooldown(command, context);
+      if (error) return context.adapter.send(context, error);
 
       switch (command.type) {
         case CommandType.STATIC:
