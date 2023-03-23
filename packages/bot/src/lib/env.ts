@@ -21,7 +21,17 @@ const env = cleanEnv(process.env, {
   DISCORD_GUILD_ID: str(),
   DISCORD_OWNER_ID: str(),
   DATABASE_URL: str(),
-  PORT: port({ default: 3000 })
+  PORT: port({ default: 3000 }),
+  REDIS_PORT: port({ default: 6379 }),
+  REDIS_HOST: str({
+    default: ''
+  }),
+  REDIS_PASSWORD: str({
+    default: ''
+  }),
+  REDIS_USERNAME: str({
+    default: ''
+  })
 });
 
 export type Env = typeof env;
