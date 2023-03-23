@@ -24,7 +24,7 @@ importers:
 
   packages/bot:
     specifiers:
-      '@bot/language': workspace:^1.4.0
+      '@bot/language': workspace:^1.4.1
       '@prisma/client': ^4.11.0
       '@sentry/node': ^7.44.2
       '@sentry/tracing': ^7.44.2
