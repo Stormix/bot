@@ -2,7 +2,7 @@
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
   "useWorkspaces": true,
   "npmClient": "pnpm",
-  "version": "1.4.4",
+  "version": "1.5.0",
   "command": {
     "publish": {
       "message": "chore(release): new version %s [skip ci]"
