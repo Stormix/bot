@@ -56,6 +56,11 @@ cp .env.example .env # and fill in the values
 |`DISCORD_GUILD_ID` |	Discord server/guild ID where the bot is installed |
 |`DISCORD_OWNER_ID` |	Discord user ID of the bot owner |
 |`DATABASE_URL` |	URL of the database used for the bot |
+|`PORT` | API listening port |
+|`REDIS_PORT` | Redis port |
+|`REDIS_HOST` | Redis host |
+|`REDIS_PASSWORD` | Redis password |
+|`REDIS_USERNAME` | Redis username |
 
 
 ## Docker

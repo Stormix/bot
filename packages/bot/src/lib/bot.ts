@@ -16,7 +16,8 @@ import Processor from './processor';
 class Bot {
   config: BotConfig = defaultConfig;
   adapters: Adapter<CommandContext>[] = [];
-  private hooks: Hook[] = [];
+  hooks: Hook[] = [];
+  storage: Storage[] = [];
 
   public readonly processor: Processor;
   public readonly logger: Logger;
@@ -28,7 +29,7 @@ class Bot {
    * Creates a new bot instance
    */
   constructor() {
-    this.logger = new Logger();
+    this.logger = new Logger().getSubLogger({ name: this.constructor.name });
     this.processor = new Processor(this);
     this.artisan = new Artisan(this);
     this.api = new App(this, []);
@@ -71,6 +72,9 @@ class Bot {
     this.logger.info('Connecting to database...');
     await this.prisma.$connect();
 
+    // Setup storage
+    await this.loadStorage();
+
     // Load config
     await this.loadConfig();
   }
@@ -92,6 +96,13 @@ class Bot {
     for (const adapter of this.adapters) {
       await adapter.setup();
     }
+  }
+
+  async loadStorage() {
+    // Load storage
+    this.logger.info('Loading storage...');
+    const storage = await loadModulesInDirectory<Constructor<Storage>>('storage');
+    this.storage = storage.map((Storage) => new Storage(this));
   }
 
   /**

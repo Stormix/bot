@@ -50,11 +50,9 @@ export default class App {
 
   public async listen() {
     return this.server.listen(this.port, () => {
-      this.logger.info(`================== API =================`);
       this.logger.info(`Env: ${this.env.NODE_ENV}`);
       this.logger.info(`Port: ${this.port}`);
       this.logger.info(`Allowed origins: ${this.allowedOrigins}`);
-      this.logger.info(`=========================================`);
     });
   }
 

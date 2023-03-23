@@ -23,7 +23,7 @@ export default class Artisan {
    * @param args The arguments to pass to the artisan command
    * @param context The context of the command (e.g. twitch or discord context)
    */
-  async validate(command: string, args: string[], context: CommandContext) {
+  async validate(command: string) {
     if (!Object.values(ArtisanCommands).includes(command as ArtisanCommands))
       throw new ValidationError('Unknown artisan command');
   }
@@ -52,7 +52,7 @@ export default class Artisan {
    */
   async run(command: string, args: string[], context: CommandContext): Promise<void> {
     try {
-      await this.validate(command, args, context);
+      await this.validate(command);
 
       const artisanCommand = this.commands.find((c) => c.isCommand(command));
       if (!artisanCommand) throw new ValidationError('Unknown artisan command');
