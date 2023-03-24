@@ -1,6 +1,6 @@
 {
   "name": "@bot/bot",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "main": "dist/index.js",
   "author": "Anas Mazouni",
   "license": "MIT",
@@ -36,7 +36,7 @@
     "typescript": "^5.0.2"
   },
   "dependencies": {
-    "@bot/language": "workspace:^1.6.2",
+    "@bot/language": "workspace:^1.6.3",
     "@prisma/client": "^4.11.0",
     "@sentry/node": "^7.44.2",
     "@sentry/tracing": "^7.44.2",
