@@ -53,6 +53,8 @@ export default class DiscordAdapter extends Adapter<DiscordCommandContext> {
         GatewayIntentBits.MessageContent
       ]
     });
+
+    this.logger.info('Discord adapter is ready!');
   }
 
   async listen() {

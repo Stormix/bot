@@ -3,15 +3,21 @@ import type { Adapters } from '@prisma/client';
 import type { CommandContext } from '../types/command';
 import type Logger from './logger';
 
+export interface AdapterOptions {
+  allowedEnvironments?: string[];
+}
+
 abstract class Adapter<Context extends CommandContext> {
   readonly bot: Bot;
   name: Adapters;
   logger: Logger;
+  options: AdapterOptions;
 
-  constructor(bot: Bot, name: Adapters) {
+  constructor(bot: Bot, name: Adapters, options: AdapterOptions = {}) {
     this.bot = bot;
     this.name = name;
     this.logger = this.bot.logger.getSubLogger({ name: this.name });
+    this.options = options;
   }
 
   abstract getClient(): unknown;

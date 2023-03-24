@@ -16,6 +16,7 @@ export const checkCommandFlags = (command: BuiltinCommand | Command, context: Co
 };
 
 export const checkCommandCooldown = async (command: BuiltinCommand | Command, context: CommandContext) => {
+  if (!command.cooldown) return null;
   const hash = `${context.adapter.name}:${context.atAuthor}:${command.name}`;
 
   // Hash command and check for cooldown
@@ -25,10 +26,9 @@ export const checkCommandCooldown = async (command: BuiltinCommand | Command, co
     context.adapter.bot.logger.debug(`Command ${command.name} is on cooldown for ${context.atAuthor}`);
     const timeLeft = command.cooldown + differenceInSeconds(new Date(cooldown), new Date());
     return `${context.atAuthor} this command is on cooldown. Please wait **${timeLeft}** seconds.`;
-  } else {
-    // Set cooldown
-    await context.adapter.bot.storage.set(hash, new Date().toISOString(), command.cooldown);
   }
 
+  // Set cooldown
+  await context.adapter.bot.storage.set(hash, new Date().toISOString(), command.cooldown);
   return null;
 };

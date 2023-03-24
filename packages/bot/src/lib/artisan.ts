@@ -25,7 +25,7 @@ export default class Artisan {
    * @param context The context of the command (e.g. twitch or discord context)
    */
   async validate(command: string) {
-    if (!Object.values(ArtisanCommands).includes(command as ArtisanCommands))
+    if (![...Object.values(ArtisanCommands), 'help'].includes(command as ArtisanCommands))
       throw new ValidationError('Unknown artisan command');
   }
 
@@ -55,6 +55,13 @@ export default class Artisan {
     try {
       await this.validate(command);
 
+      if (command.toLowerCase() === 'help') {
+        return context.adapter.send(
+          context,
+          `Available artisan commands: ${this.commands.map((c) => c.name).join(', ')}`
+        );
+      }
+
       const artisanCommand = this.commands.find((c) => c.isCommand(command));
       if (!artisanCommand) throw new ValidationError('Unknown artisan command');
 
@@ -70,6 +77,7 @@ export default class Artisan {
           commandArgs: args.join(' ')
         }
       });
+
       this.logger.error('Failed to run artisan command. ', error);
       return context.adapter.send(
         context,

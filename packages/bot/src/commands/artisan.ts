@@ -20,12 +20,13 @@ export default class ArtisanCommand extends BuiltinCommand {
   }
 
   async run(context: CommandContext, args: string[]) {
-    this.logger.debug('Artisan command called');
     const [command, ...commandArgs] = args;
-    if (!command) {
-      return context.adapter.send(context, 'Please specify a command to run');
-    }
+    this.logger.debug('Artisan command called: ', command, commandArgs);
+
     try {
+      if (!command) {
+        return context.adapter.send(context, 'Please specify a command to run');
+      }
       return this.artisan.run(command, commandArgs, context);
     } catch (error) {
       Sentry.captureException(error, {

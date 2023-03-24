@@ -3,7 +3,6 @@ import { checkCommandCooldown, checkCommandFlags } from '@/utils/commands';
 import { loadModulesInDirectory } from '@/utils/loaders';
 import { CommandType } from '@prisma/client';
 import * as Sentry from '@sentry/node';
-import { omit } from 'lodash';
 import type { CommandContext } from '../types/command';
 import type Bot from './bot';
 import type BuiltinCommand from './command';
@@ -17,8 +16,7 @@ export default class Processor {
 
   constructor(bot: Bot) {
     this.bot = bot;
-    this.logger = bot.logger.getSubLogger({ name: 'CommandManager' });
-    this.logger.debug('CommandManager initialized');
+    this.logger = bot.logger.getSubLogger({ name: this.constructor.name });
   }
 
   register(command: BuiltinCommand) {
@@ -42,8 +40,7 @@ export default class Processor {
       if (this.commands.length === 0) await this.load();
 
       this.logger.debug(
-        `Evaluating command ${keyword} with args ${args.join(', ')} from`,
-        omit(context, 'adapter', 'message')
+        `Evaluating command ${keyword} with args ${args.join(', ')} from ${context.atAuthor} in ${context.adapter.name}`
       );
 
       // Check for built-in commands
@@ -52,7 +49,6 @@ export default class Processor {
       if (commandInstance) {
         let error = checkCommandFlags(commandInstance, context);
         if (error) return context.adapter.send(context, error);
-        // Hash command and check for cooldown
         error = await checkCommandCooldown(commandInstance, context);
         if (error) return context.adapter.send(context, error);
         return commandInstance.run(context, args);

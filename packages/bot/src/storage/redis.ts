@@ -33,7 +33,7 @@ class RedisStorage extends Storage {
         value,
         expiry
           ? {
-              EX: expiry ?? 0
+              EX: expiry
             }
           : undefined
       );

@@ -58,6 +58,8 @@ export default class TwitchAdapter extends Adapter<TwitchCommandContext> {
         }).then((response) => response.accessToken),
       log: { level: 'error' }
     });
+
+    this.logger.info('Twitch adapter is ready!');
   }
 
   async listen() {
