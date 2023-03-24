@@ -31,6 +31,8 @@ jobs:
           VERSION=$(sed 's/.*"version": "\(.*\)".*/\1/;t;d' ./package.json)
           pnpm run genversion
 
+          cd ../..
+
           git add .
           git commit -m "chore(release): new version $VERSION [skip ci]"
           git tag -a "v$VERSION" -m "chore(release): new version $VERSION [skip ci]"
