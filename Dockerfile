@@ -1,6 +1,6 @@
 FROM node:19-slim AS base
 
-RUN apt-get update || : && apt-get install python -y
+RUN apt-get update || : && apt-get install python3 -y
 RUN npm i -g pnpm
 
 FROM base AS dependencies
