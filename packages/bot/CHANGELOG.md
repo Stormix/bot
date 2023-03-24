@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.9.1 (2023-03-24)
+
+
+### Bug Fixes
+
+* ensure "@sentry/tracing" is imported ([903bc1d](https://github.com/Stormix/bot/commit/903bc1d6bed00f3771e18f5a8d25c8d39ced5999))
+
+
+
+
+
 # 1.9.0 (2023-03-24)
 
 
