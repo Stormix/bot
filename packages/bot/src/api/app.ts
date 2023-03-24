@@ -3,6 +3,7 @@ import type { Env } from '@/lib/env';
 import type Logger from '@/lib/logger';
 import { version } from '@/version';
 import * as Sentry from '@sentry/node';
+import { ProfilingIntegration } from '@sentry/profiling-node';
 import * as Tracing from '@sentry/tracing';
 import compression from 'compression';
 import cors from 'cors';
@@ -141,10 +142,12 @@ export default class App {
         // enable Express.js middleware tracing
         new Tracing.Integrations.Express({
           app: this.app
-        })
+        }),
+        new ProfilingIntegration()
       ],
-      tracesSampleRate: this.env.isProd ? 0.5 : 0,
-      release: version
+      tracesSampleRate: this.env.isProd ? 1 : 0,
+      release: version,
+      profilesSampleRate: this.env.isProd ? 1.0 : 0
     });
 
     this.app.use(Sentry.Handlers.requestHandler());
