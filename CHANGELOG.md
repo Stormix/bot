@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.7.0 (2023-03-24)
+
+
+### Features
+
+* sentry profiling ([93138e1](https://github.com/Stormix/bot/commit/93138e100ad68b23712c5a618569d5b42d33c113))
+
+
+
+
+
 ## 1.6.7 (2023-03-24)
 
 **Note:** Version bump only for package root
