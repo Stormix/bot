@@ -15,7 +15,8 @@
       "Funcall"
     ],
     "conventionalCommits.scopes": [
-      "typings"
+      "typings",
+      "releases"
     ],
   }
 }

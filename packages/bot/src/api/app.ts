@@ -1,6 +1,7 @@
 import type Bot from '@/lib/bot';
 import type { Env } from '@/lib/env';
 import type Logger from '@/lib/logger';
+import { version } from '@/version';
 import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
 import compression from 'compression';
@@ -142,7 +143,8 @@ export default class App {
           app: this.app
         })
       ],
-      tracesSampleRate: 1.0
+      tracesSampleRate: this.env.isProd ? 0.5 : 0,
+      release: version
     });
 
     this.app.use(Sentry.Handlers.requestHandler());
