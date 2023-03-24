@@ -4,6 +4,7 @@ Bot:
   ✔ Configurable bot settings
   - emote support
   ✔ command cooldowns
+  - Private messages & whispers
 
 Language:
   - Add new functions to the language system:

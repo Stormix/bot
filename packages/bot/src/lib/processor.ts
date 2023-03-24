@@ -2,6 +2,7 @@ import type { Constructor } from '@/types/generics';
 import { checkCommandCooldown, checkCommandFlags } from '@/utils/commands';
 import { loadModulesInDirectory } from '@/utils/loaders';
 import { CommandType } from '@prisma/client';
+import * as Sentry from '@sentry/node';
 import { omit } from 'lodash';
 import type { CommandContext } from '../types/command';
 import type Bot from './bot';
@@ -90,6 +91,11 @@ export default class Processor {
           try {
             await BotLanguage.evaluate(code, context);
           } catch (error) {
+            Sentry.captureException(error, {
+              tags: {
+                command: keyword
+              }
+            });
             this.logger.error(`Error while evaluating command ${keyword} from ${context.atAuthor}!`, error);
             await context.adapter.send(
               context,
@@ -102,6 +108,11 @@ export default class Processor {
           return context.adapter.send(context, `${context.atOwner} this command has an invalid type!`);
       }
     } catch (error) {
+      Sentry.captureException(error, {
+        tags: {
+          command: keyword
+        }
+      });
       this.logger.error(`Error while running command ${keyword} from ${context.atAuthor}!`);
       this.logger.error(error);
       await context.adapter.send(

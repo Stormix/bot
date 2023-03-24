@@ -1,6 +1,7 @@
 import type Bot from '@/lib/bot';
 import BuiltinCommand from '@/lib/command';
 import type { CommandContext } from '@/types/command';
+import * as Sentry from '@sentry/node';
 
 export default class ArtisanCommand extends BuiltinCommand {
   name = 'artisan';
@@ -27,6 +28,12 @@ export default class ArtisanCommand extends BuiltinCommand {
     try {
       return this.artisan.run(command, commandArgs, context);
     } catch (error) {
+      Sentry.captureException(error, {
+        tags: {
+          command: `artisan ${command}`,
+          commandArgs: commandArgs.join(' ')
+        }
+      });
       this.logger.error('Failed to run artisan command.', error);
       return context.adapter.send(
         context,

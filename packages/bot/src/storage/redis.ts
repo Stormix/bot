@@ -1,6 +1,7 @@
 import type Bot from '@/lib/bot';
 import Logger from '@/lib/logger';
 import { StorageTypes } from '@/types/storage';
+import * as Sentry from '@sentry/node';
 import { createClient } from 'redis';
 import Storage from '../lib/storage';
 
@@ -27,10 +28,21 @@ class RedisStorage extends Storage {
 
   async set(key: string, value: string, expiry?: number) {
     try {
-      await this.client.set(`${this.prefix}${key}`, value, {
-        EX: expiry ?? 0
-      });
+      await this.client.set(
+        `${this.prefix}${key}`,
+        value,
+        expiry
+          ? {
+              EX: expiry ?? 0
+            }
+          : undefined
+      );
     } catch (error) {
+      Sentry.captureException(error, {
+        tags: {
+          storage: 'redis'
+        }
+      });
       this.logger.error('Failed to set key', error);
     }
   }
@@ -39,6 +51,11 @@ class RedisStorage extends Storage {
     try {
       return this.client.get(`${this.prefix}${key}`);
     } catch (error) {
+      Sentry.captureException(error, {
+        tags: {
+          storage: 'redis'
+        }
+      });
       this.logger.error('Failed to get key', error);
       return null;
     }

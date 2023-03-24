@@ -2,6 +2,7 @@ import { ArtisanCommands } from '@/types/artisan';
 import type { CommandContext } from '@/types/command';
 import type { Constructor } from '@/types/generics';
 import { loadModulesInDirectory } from '@/utils/loaders';
+import * as Sentry from '@sentry/node';
 import type Bot from './bot';
 import type BuiltinCommand from './command';
 import { ValidationError } from './errors';
@@ -62,6 +63,13 @@ export default class Artisan {
       if (error instanceof ValidationError) {
         return context.adapter.send(context, error.message);
       }
+
+      Sentry.captureException(error, {
+        tags: {
+          command: `artisan ${command}`,
+          commandArgs: args.join(' ')
+        }
+      });
       this.logger.error('Failed to run artisan command. ', error);
       return context.adapter.send(
         context,

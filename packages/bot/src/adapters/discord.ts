@@ -1,6 +1,7 @@
 import type Bot from '@/lib/bot';
 import type { CommandContext, DiscordCommandContext } from '@/types/command';
 import { Adapters } from '@prisma/client';
+import * as Sentry from '@sentry/node';
 import type { Message } from 'discord.js';
 import { Client, Events, GatewayIntentBits } from 'discord.js';
 import type { Context } from 'vm';
@@ -88,6 +89,11 @@ export default class DiscordAdapter extends Adapter<DiscordCommandContext> {
       this.logger.warn(warn);
     });
     this.client.on(Events.Error, (error) => {
+      Sentry.captureException(error, {
+        tags: {
+          adapter: 'discord'
+        }
+      });
       this.logger.error(error);
     });
 
