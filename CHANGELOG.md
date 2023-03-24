@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.8.0 (2023-03-24)
+
+
+### Features
+
+* sentry capture exceptions + bump deps ([c259ae5](https://github.com/Stormix/bot/commit/c259ae5d77a02c2f603f3861f5c370df2f3eb862))
+
+
+
+
+
 ## 1.7.3 (2023-03-24)
 
 **Note:** Version bump only for package root
