@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.6.0 (2023-03-23)
+
+### Features
+
+- command cooldown ([8597335](https://github.com/Stormix/bot/commit/8597335b7a91106b81adad726cf6d0cca6e8cdae))
+
 # 1.5.0 (2023-03-23)
 
 ### Features
