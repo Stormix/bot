@@ -40,10 +40,10 @@ jobs:
           SENTRY_PROJECT: bot
 
         run: |
+          pnpm run build
+
           cd packages/bot
           VERSION=$(sed 's/.*"version": "\(.*\)".*/\1/;t;d' ./package.json)
-
-          pnpm run build
 
           sentry-cli releases new "$VERSION"
           sentry-cli releases set-commits "$VERSION" --auto
