@@ -1,7 +1,6 @@
 import type Bot from '@/lib/bot';
-import { Adapters } from '@/types/adapter';
 import type { CommandContext, DiscordCommandContext } from '@/types/command';
-import { CommandSource } from '@/types/command';
+import { Adapters } from '@prisma/client';
 import type { Message } from 'discord.js';
 import { Client, Events, GatewayIntentBits } from 'discord.js';
 import type { Context } from 'vm';
@@ -11,7 +10,7 @@ export default class DiscordAdapter extends Adapter<DiscordCommandContext> {
   private client: Client | null = null;
 
   constructor(bot: Bot) {
-    super(bot, Adapters.Discord);
+    super(bot, Adapters.DISCORD);
   }
 
   atAuthor(message: Message) {
@@ -25,7 +24,6 @@ export default class DiscordAdapter extends Adapter<DiscordCommandContext> {
 
   createContext(message: Message): DiscordCommandContext {
     return {
-      source: CommandSource.Discord,
       atAuthor: this.atAuthor(message),
       atOwner: `<@${this.bot.config.env.DISCORD_OWNER_ID}>`,
       message,

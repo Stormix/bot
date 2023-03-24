@@ -12,6 +12,11 @@ enum CommandType {
   DYNAMIC
 }
 
+enum Adapters {
+  TWITCH
+  DISCORD
+}
+
 model Command {
   id      String   @id @default(auto()) @map("_id") @db.ObjectId
   aliases String[]
@@ -21,6 +26,7 @@ model Command {
   enabled Boolean     @default(true)
   cooldown Int        @default(0)
   ownerOnly Boolean   @default(false)
+  disabledAdapters Adapters[] @default([])
 }
 
 model Setting {

@@ -1,5 +1,5 @@
 import type Bot from '@/lib/bot';
-import type { Adapters } from '@/types/adapter';
+import type { Adapters } from '@prisma/client';
 import type { CommandContext } from '../types/command';
 import type Logger from './logger';
 

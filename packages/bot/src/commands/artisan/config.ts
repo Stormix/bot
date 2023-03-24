@@ -1,7 +1,7 @@
 import BuiltinCommand from '@/lib/command';
-import { Adapters } from '@/types/adapter';
 import { ArtisanCommands } from '@/types/artisan';
 import type { CommandContext } from '@/types/command';
+import { Adapters } from '@prisma/client';
 
 export default class CommandsCommand extends BuiltinCommand {
   name = ArtisanCommands.Config;
@@ -36,9 +36,9 @@ export default class CommandsCommand extends BuiltinCommand {
     const formattedOverridesList = overrides.map((o) => `${o.name}: ${o.value}`);
 
     switch (context.adapter.name) {
-      case Adapters.Discord:
+      case Adapters.DISCORD:
         return context.adapter.send(context, `**Settings**:\n\`\`\`json\n${formattedOverrides}\`\`\``);
-      case Adapters.Twitch:
+      case Adapters.TWITCH:
         await Promise.all(formattedOverridesList.map((s) => context.adapter.send(context, s)));
         return;
     }

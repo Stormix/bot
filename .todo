@@ -1,4 +1,10 @@
-- Write a todo :D
-- Cron-messages
-- Finish artisan commands to CRUD commands
-✔ Configurable bot settings
+Bot:
+  - Cron-messages
+  ✔ Finish artisan commands to CRUD commands
+  ✔ Configurable bot settings
+  - emote support
+  ✔ command cooldowns
+
+Language:
+  - Add new functions to the language system:
+    - Ability to execute mod commands

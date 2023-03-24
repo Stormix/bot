@@ -4,14 +4,8 @@ import type { PrivateMessage } from 'twitch-js';
 import type DiscordAdapter from '../adapters/discord';
 import type TwitchAdapter from '../adapters/twitch';
 
-export enum CommandSource {
-  Twitch = 'twitch',
-  Discord = 'discord'
-}
-
 export interface CommandContext {
   atOwner: string;
-  source: CommandSource;
   atAuthor: string;
   adapter: TwitchAdapter | DiscordAdapter;
   message: Message | PrivateMessage;

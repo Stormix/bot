@@ -1,7 +1,6 @@
 import type Bot from '@/lib/bot';
-import { Adapters } from '@/types/adapter';
 import type { CommandContext, TwitchCommandContext } from '@/types/command';
-import { CommandSource } from '@/types/command';
+import { Adapters } from '@prisma/client';
 import type { PrivateMessage } from 'twitch-js';
 import { Chat, ChatEvents, Commands } from 'twitch-js';
 import fetchUtil from 'twitch-js/lib/utils/fetch';
@@ -12,7 +11,7 @@ export default class TwitchAdapter extends Adapter<TwitchCommandContext> {
   client: Chat | null = null;
 
   constructor(bot: Bot) {
-    super(bot, Adapters.Twitch);
+    super(bot, Adapters.TWITCH);
   }
 
   atAuthor(message: PrivateMessage) {
@@ -26,7 +25,6 @@ export default class TwitchAdapter extends Adapter<TwitchCommandContext> {
 
   createContext(message: PrivateMessage): TwitchCommandContext {
     return {
-      source: CommandSource.Twitch,
       atAuthor: this.atAuthor(message),
       atOwner: `@${this.bot.config.env.TWITCH_USERNAME}`,
       message,

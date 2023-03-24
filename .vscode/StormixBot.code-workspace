@@ -14,5 +14,8 @@
       "cooldown",
       "Funcall"
     ],
+    "conventionalCommits.scopes": [
+      "typings"
+    ],
   }
 }

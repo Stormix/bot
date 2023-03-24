@@ -1,5 +1,5 @@
 import Hook from '@/lib/hook';
-import { Adapters } from '@/types/adapter';
+import { Adapters } from '@prisma/client';
 import type { Client } from 'discord.js';
 import { ActivityType } from 'discord.js';
 
@@ -9,7 +9,7 @@ export default class DiscordHook extends Hook {
   }
   async onReady() {
     // Get the discord adapter
-    const adapter = this.bot.adapters.find((adapter) => adapter.name === Adapters.Discord);
+    const adapter = this.bot.adapters.find((adapter) => adapter.name === Adapters.DISCORD);
     if (!adapter) {
       this.logger.error('Discord adapter not found');
       return;
