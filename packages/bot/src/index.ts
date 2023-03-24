@@ -2,9 +2,9 @@ import * as Sentry from '@sentry/node';
 import { onShutdown } from 'node-graceful-shutdown';
 import Bot from './lib/bot';
 import env from './lib/env';
-import { initSentry } from './sentry';
+import { generateSentryConfig } from './utils/sentry';
 
-initSentry();
+Sentry.init(generateSentryConfig(env));
 
 const bot = env.ENABLED ? new Bot() : null;
 

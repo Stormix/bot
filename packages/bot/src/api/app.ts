@@ -1,9 +1,8 @@
 import type Bot from '@/lib/bot';
 import type { Env } from '@/lib/env';
 import type Logger from '@/lib/logger';
-import { version } from '@/version';
+import { generateSentryConfig } from '@/utils/sentry';
 import * as Sentry from '@sentry/node';
-import { ProfilingIntegration } from '@sentry/profiling-node';
 import * as Tracing from '@sentry/tracing';
 import compression from 'compression';
 import cors from 'cors';
@@ -131,24 +130,19 @@ export default class App {
     if (this.env.isDev) {
       return;
     }
-
     // Sentry error handling config
-    Sentry.init({
-      dsn: this.env.SENTRY_DSN,
-      environment: this.env.NODE_ENV,
-      integrations: [
-        // enable HTTP calls tracing
-        new Sentry.Integrations.Http({ tracing: true }),
-        // enable Express.js middleware tracing
-        new Tracing.Integrations.Express({
-          app: this.app
-        }),
-        new ProfilingIntegration()
-      ],
-      tracesSampleRate: this.env.isProd ? 1 : 0,
-      release: version,
-      profilesSampleRate: this.env.isProd ? 1.0 : 0
-    });
+    Sentry.init(
+      generateSentryConfig(this.env, {
+        integrations: [
+          // enable HTTP calls tracing
+          new Sentry.Integrations.Http({ tracing: true }),
+          // enable Express.js middleware tracing
+          new Tracing.Integrations.Express({
+            app: this.app
+          })
+        ]
+      })
+    );
 
     this.app.use(Sentry.Handlers.requestHandler());
     this.app.use(Sentry.Handlers.tracingHandler());
