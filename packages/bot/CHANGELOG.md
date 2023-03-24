@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.9.0 (2023-03-24)
+
+
+### Features
+
+* cli adapter ([1d59da1](https://github.com/Stormix/bot/commit/1d59da1e61156ec40455eb1fd438ec28a96e0838))
+
+
+
+
+
 # 1.8.0 (2023-03-24)
 
 
