@@ -61,7 +61,7 @@ export default class TwitchAdapter extends Adapter<TwitchContext> {
             client_secret: this.bot.config.env.TWITCH_CLIENT_SECRET
           }
         }).then((response) => response.accessToken),
-      log: { level: 'debug' }
+      log: { level: 'warn' }
     });
 
     this.logger.info('Twitch adapter is ready!');
