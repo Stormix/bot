@@ -1,9 +1,9 @@
 import type BuiltinCommand from '@/lib/command';
-import type { CommandContext } from '@/types/command';
+import type { Context } from '@/types/context';
 import type { Command } from '@prisma/client';
 import { differenceInSeconds } from 'date-fns';
 
-export const checkCommandFlags = (command: BuiltinCommand | Command, context: CommandContext) => {
+export const checkCommandFlags = (command: BuiltinCommand | Command, context: Context) => {
   if (command?.ownerOnly && !context.adapter.isOwner(context.message)) {
     return `${context.atAuthor} this command can only be used by ${context.atOwner}! Do it one more time and I'll ban you!`;
   }
@@ -15,7 +15,7 @@ export const checkCommandFlags = (command: BuiltinCommand | Command, context: Co
   return null;
 };
 
-export const checkCommandCooldown = async (command: BuiltinCommand | Command, context: CommandContext) => {
+export const checkCommandCooldown = async (command: BuiltinCommand | Command, context: Context) => {
   if (!command.cooldown) return null;
   const hash = `${context.adapter.name}:${context.atAuthor}:${command.name}`;
 

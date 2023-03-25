@@ -5,6 +5,7 @@ Bot:
   - emote support
   ✔ command cooldowns
   - Private messages & whispers
+  - Implement an event system
 
 Language:
   - Add new functions to the language system:

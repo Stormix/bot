@@ -1,8 +1,8 @@
 import type Bot from '@/lib/bot';
 import { StorageTypes } from '@/types/storage';
-import Storage from '../lib/storage';
+import Cache from '../lib/cache';
 
-export default class MemoryStorage extends Storage {
+export default class MemoryCache extends Cache {
   primary = false;
   private _data: Record<string, string> = {};
 
@@ -20,5 +20,9 @@ export default class MemoryStorage extends Storage {
 
   get(key: string) {
     return Promise.resolve(this._data?.[`${this.prefix}${key}`] ?? null);
+  }
+
+  stop() {
+    return Promise.resolve();
   }
 }

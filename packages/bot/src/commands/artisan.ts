@@ -1,6 +1,6 @@
 import type Bot from '@/lib/bot';
 import BuiltinCommand from '@/lib/command';
-import type { CommandContext } from '@/types/command';
+import type { Context } from '@/types/context';
 import * as Sentry from '@sentry/node';
 
 export default class ArtisanCommand extends BuiltinCommand {
@@ -19,13 +19,13 @@ export default class ArtisanCommand extends BuiltinCommand {
     return this.bot.artisan;
   }
 
-  async run(context: CommandContext, args: string[]) {
+  async run(context: Context, args: string[]) {
     const [command, ...commandArgs] = args;
     this.logger.debug('Artisan command called: ', command, commandArgs);
 
     try {
       if (!command) {
-        return context.adapter.send(context, 'Please specify a command to run');
+        return context.adapter.send('Please specify a command to run', context);
       }
       return this.artisan.run(command, commandArgs, context);
     } catch (error) {
@@ -37,8 +37,8 @@ export default class ArtisanCommand extends BuiltinCommand {
       });
       this.logger.error('Failed to run artisan command.', error);
       return context.adapter.send(
-        context,
-        `Failed to run artisan command. ${context.atOwner} check logs for more info.`
+        `Failed to run artisan command. ${context.atOwner} check logs for more info.`,
+        context
       );
     }
   }

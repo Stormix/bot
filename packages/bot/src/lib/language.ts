@@ -1,10 +1,10 @@
-import type { CommandContext } from '@/types/command';
+import type { Context } from '@/types/context';
 import { evaluate, parse } from '@bot/language';
 import { Expr, ExprType } from '@bot/language/dist/lib/expression';
 import type { EvalContext, EvalScope } from '@bot/language/dist/lib/scoping';
 
 export default class BotLanguage {
-  static async evaluate(code: string, commandContext: CommandContext) {
+  static async evaluate(code: string, commandContext: Context) {
     const parsedExpressions = parse(code);
 
     const botScope: EvalScope = {
@@ -22,7 +22,7 @@ export default class BotLanguage {
             }
             response = response + (val?.asStr as string);
           }
-          await commandContext.adapter.send(commandContext, response);
+          await commandContext.adapter.send(response, commandContext);
           return [undefined, null];
         }
       }

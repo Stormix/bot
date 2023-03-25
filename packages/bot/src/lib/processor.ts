@@ -1,9 +1,8 @@
-import type { Constructor } from '@/types/generics';
+import type { Context } from '@/types/context';
 import { checkCommandCooldown, checkCommandFlags } from '@/utils/commands';
 import { loadModulesInDirectory } from '@/utils/loaders';
 import { CommandType } from '@prisma/client';
 import * as Sentry from '@sentry/node';
-import type { CommandContext } from '../types/command';
 import type Bot from './bot';
 import type BuiltinCommand from './command';
 import BotLanguage from './language';
@@ -12,6 +11,7 @@ import type Logger from './logger';
 export default class Processor {
   private readonly logger: Logger;
   private readonly bot: Bot;
+
   private commands: BuiltinCommand[] = [];
 
   constructor(bot: Bot) {
@@ -28,14 +28,14 @@ export default class Processor {
   }
 
   async load() {
-    const commands = await loadModulesInDirectory<Constructor<BuiltinCommand>>('commands');
+    const commands = await loadModulesInDirectory<BuiltinCommand>('commands');
     for (const Command of commands) {
       this.register(new Command(this.bot));
     }
     this.logger.debug(`Loaded ${this.commands.length} bot commands.`);
   }
 
-  async run<Context extends CommandContext>(keyword: string, args: string[], context: Context) {
+  async run<C extends Context>(keyword: string, args: string[], context: C) {
     try {
       if (this.commands.length === 0) await this.load();
 
@@ -48,9 +48,9 @@ export default class Processor {
 
       if (commandInstance) {
         let error = checkCommandFlags(commandInstance, context);
-        if (error) return context.adapter.send(context, error);
+        if (error) return context.adapter.send(error, context);
         error = await checkCommandCooldown(commandInstance, context);
-        if (error) return context.adapter.send(context, error);
+        if (error) return context.adapter.send(error, context);
         return commandInstance.run(context, args);
       }
 
@@ -64,24 +64,24 @@ export default class Processor {
       if (!command) {
         // Command not found
         return context.adapter.send(
-          context,
-          `${context.atAuthor} Command \`${this.bot.config.prefix}${keyword}\` not found!`
+          `${context.atAuthor} Command \`${this.bot.config.prefix}${keyword}\` not found!`,
+          context
         );
       }
 
       if (!command?.response) {
-        return context.adapter.send(context, `${context.atOwner} probably forgot to add a response to this command!`);
+        return context.adapter.send(`${context.atOwner} probably forgot to add a response to this command!`, context);
       }
 
       let error = checkCommandFlags(command, context);
-      if (error) return context.adapter.send(context, error);
+      if (error) return context.adapter.send(error, context);
       // Hash command and check for cooldown
       error = await checkCommandCooldown(command, context);
-      if (error) return context.adapter.send(context, error);
+      if (error) return context.adapter.send(error, context);
 
       switch (command.type) {
         case CommandType.STATIC:
-          return context.adapter.send(context, command.response);
+          return context.adapter.send(command.response, context);
         case CommandType.DYNAMIC:
           const code = command.response;
           try {
@@ -94,14 +94,14 @@ export default class Processor {
             });
             this.logger.error(`Error while evaluating command ${keyword} from ${context.atAuthor}!`, error);
             await context.adapter.send(
-              context,
-              `${context.atAuthor} could not evaluate this command! Ask ${context.atOwner} to check the logs!`
+              `${context.atAuthor} could not evaluate this command! Ask ${context.atOwner} to check the logs!`,
+              context
             );
           } finally {
             return;
           }
         default:
-          return context.adapter.send(context, `${context.atOwner} this command has an invalid type!`);
+          return context.adapter.send(`${context.atOwner} this command has an invalid type!`, context);
       }
     } catch (error) {
       Sentry.captureException(error, {
@@ -112,8 +112,8 @@ export default class Processor {
       this.logger.error(`Error while running command ${keyword} from ${context.atAuthor}!`);
       this.logger.error(error);
       await context.adapter.send(
-        context,
-        `${context.atAuthor} could not run this command! Ask ${context.atOwner} to check the logs!`
+        `${context.atAuthor} could not run this command! Ask ${context.atOwner} to check the logs!`,
+        context
       );
     }
   }

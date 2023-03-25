@@ -1,10 +1,10 @@
 import BuiltinCommand from '@/lib/command';
-import type { CommandContext } from '@/types/command';
+import type { Context } from '@/types/context';
 
 export default class PrefixCommand extends BuiltinCommand {
   name = 'prefix';
 
-  async run(context: CommandContext) {
-    return context.adapter.send(context, `My prefix is \`${context.adapter.bot.prefix}\``);
+  async run(context: Context) {
+    return context.adapter.send(`My prefix is \`${context.adapter.bot.prefix}\``, context);
   }
 }

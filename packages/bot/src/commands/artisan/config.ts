@@ -1,12 +1,12 @@
 import BuiltinCommand from '@/lib/command';
 import { ArtisanCommands } from '@/types/artisan';
-import type { CommandContext } from '@/types/command';
+import type { Context } from '@/types/context';
 import { Adapters } from '@prisma/client';
 
 export default class CommandsCommand extends BuiltinCommand {
   name = ArtisanCommands.Config;
 
-  async run(context: CommandContext, args: string[]): Promise<void> {
+  async run(context: Context, args: string[]): Promise<void> {
     switch (args[0]) {
       case 'set':
         return this.set(context, args);
@@ -24,7 +24,7 @@ export default class CommandsCommand extends BuiltinCommand {
    * Lists all overrides
    * @param context The context of the command (e.g. twitch or discord context)
    */
-  async list(context: CommandContext): Promise<void> {
+  async list(context: Context): Promise<void> {
     // Get all overrides
     const overrides = await this.bot.prisma.setting.findMany();
     const overridesObject = overrides.reduce((acc, cur) => {
@@ -37,9 +37,9 @@ export default class CommandsCommand extends BuiltinCommand {
 
     switch (context.adapter.name) {
       case Adapters.DISCORD:
-        return context.adapter.send(context, `**Settings**:\n\`\`\`json\n${formattedOverrides}\`\`\``);
+        return context.adapter.send(`**Settings**:\n\`\`\`json\n${formattedOverrides}\`\`\``, context);
       case Adapters.TWITCH:
-        await Promise.all(formattedOverridesList.map((s) => context.adapter.send(context, s)));
+        await Promise.all(formattedOverridesList.map((s) => context.adapter.send(s, context)));
         return;
     }
   }
@@ -49,7 +49,7 @@ export default class CommandsCommand extends BuiltinCommand {
    * @param context The context of the command (e.g. twitch or discord context)
    * @param command  The command to remove
    */
-  async remove(context: CommandContext, key: string): Promise<void> {
+  async remove(context: Context, key: string): Promise<void> {
     if (!key) return this.help(context);
 
     // Check if command exists
@@ -61,7 +61,7 @@ export default class CommandsCommand extends BuiltinCommand {
 
     console.log(setting);
     if (!setting) {
-      return context.adapter.send(context, `Setting ${key} does not exist.`);
+      return context.adapter.send(`Setting ${key} does not exist.`, context);
     }
 
     // Delete command
@@ -71,10 +71,10 @@ export default class CommandsCommand extends BuiltinCommand {
       }
     });
 
-    return context.adapter.send(context, `Setting ${key} removed.`);
+    return context.adapter.send(`Setting ${key} removed.`, context);
   }
 
-  async set(context: CommandContext, args: string[]): Promise<void> {
+  async set(context: Context, args: string[]): Promise<void> {
     if (args.length < 3) return this.help(context);
 
     const key = args[1];
@@ -96,7 +96,7 @@ export default class CommandsCommand extends BuiltinCommand {
         }
       });
       await this.bot.reload();
-      return context.adapter.send(context, `Setting ${key} created.`);
+      return context.adapter.send(`Setting ${key} created.`, context);
     }
 
     await this.bot.prisma.setting.update({
@@ -108,23 +108,23 @@ export default class CommandsCommand extends BuiltinCommand {
       }
     });
     await this.bot.reload();
-    return context.adapter.send(context, `Setting ${key} updated.`);
+    return context.adapter.send(`Setting ${key} updated.`, context);
   }
 
   /**
    * Displays help for the command
    * @param context The context of the command (e.g. twitch or discord context)
    */
-  async help(context: CommandContext, command?: string): Promise<void> {
+  async help(context: Context, command?: string): Promise<void> {
     switch (command) {
       case 'set':
-        return context.adapter.send(context, `Usage: ${context.atAuthor} -> ${this.name} set <key> <value>`);
+        return context.adapter.send(`Usage: ${context.atAuthor} -> ${this.name} set <key> <value>`, context);
       case 'remove':
-        return context.adapter.send(context, `Usage: ${context.atAuthor} -> ${this.name} remove|delete <key>`);
+        return context.adapter.send(`Usage: ${context.atAuthor} -> ${this.name} remove|delete <key>`, context);
       case 'list':
-        return context.adapter.send(context, `Usage: ${context.atAuthor} -> ${this.name} list`);
+        return context.adapter.send(`Usage: ${context.atAuthor} -> ${this.name} list`, context);
       default:
-        return context.adapter.send(context, `Usage: ${context.atAuthor} -> ${this.name} <list|set|remove>`);
+        return context.adapter.send(`Usage: ${context.atAuthor} -> ${this.name} <list|set|remove>`, context);
     }
   }
 }

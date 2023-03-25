@@ -3,9 +3,9 @@ import Logger from '@/lib/logger';
 import { StorageTypes } from '@/types/storage';
 import * as Sentry from '@sentry/node';
 import { createClient } from 'redis';
-import Storage from '../lib/storage';
+import Cache from '../lib/cache';
 
-class RedisStorage extends Storage {
+export default class RedisCache extends Cache {
   primary = true;
   client: ReturnType<typeof createClient>;
   logger: Logger;
@@ -60,6 +60,8 @@ class RedisStorage extends Storage {
       return null;
     }
   }
-}
 
-export default RedisStorage;
+  async stop() {
+    await this.client.quit();
+  }
+}

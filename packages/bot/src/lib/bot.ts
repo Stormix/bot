@@ -2,24 +2,25 @@ import App from '@/api/app';
 import type { BotConfig } from '@/config/bot';
 import { defaultConfig } from '@/config/bot';
 import type Adapter from '@/lib/adapter';
-import type { CommandContext } from '@/types/command';
-import type { Constructor } from '@/types/generics';
+import type { Context } from '@/types/context';
 import { loadModulesInDirectory } from '@/utils/loaders';
 import { PrismaClient } from '@prisma/client';
 import type { Dictionary } from 'lodash';
 import { omit } from 'lodash';
 import Artisan from './artisan';
+import Brain from './brain';
+import type Cache from './cache';
 import type Hook from './hook';
 import Logger from './logger';
 import Processor from './processor';
-import type Storage from './storage';
 
 class Bot {
   config: BotConfig = defaultConfig;
-  adapters: Adapter<CommandContext>[] = [];
+  adapters: Adapter<Context>[] = [];
   hooks: Hook[] = [];
-  storages: Storage[] = [];
+  caches: Cache[] = [];
 
+  public readonly brain: Brain;
   public readonly processor: Processor;
   public readonly logger: Logger;
   public readonly prisma: PrismaClient = new PrismaClient();
@@ -31,6 +32,7 @@ class Bot {
    */
   constructor() {
     this.logger = new Logger().getSubLogger({ name: this.constructor.name });
+    this.brain = new Brain(this);
     this.processor = new Processor(this);
     this.artisan = new Artisan(this);
     this.api = new App(this, []);
@@ -41,7 +43,7 @@ class Bot {
   }
 
   get storage() {
-    const primaryStorage = this.storages.find((s) => s.primary);
+    const primaryStorage = this.caches.find((s) => s.primary);
     if (!primaryStorage) throw new Error('No primary storage found');
     return primaryStorage;
   }
@@ -66,6 +68,7 @@ class Bot {
   async setup() {
     this.logger.debug('Setting up bot...');
 
+    await this.brain.boot();
     await this.processor.load();
     await this.artisan.load();
 
@@ -80,7 +83,7 @@ class Bot {
     await this.prisma.$connect();
 
     // Setup storage
-    await this.loadStorage();
+    await this.loadCache();
 
     // Load config
     await this.loadConfig();
@@ -89,14 +92,14 @@ class Bot {
   async loadHooks() {
     // Load hooks
     this.logger.info('Loading hooks...');
-    const hooks = await loadModulesInDirectory<Constructor<Hook>>('hooks');
+    const hooks = await loadModulesInDirectory<Hook>('hooks');
     this.hooks = hooks.map((Hook) => new Hook(this));
   }
 
   async loadAdapters() {
     // Load adapters
     this.logger.info('Loading adapters...');
-    const adapters = await loadModulesInDirectory<Constructor<Adapter<CommandContext>>>('adapters');
+    const adapters = await loadModulesInDirectory<Adapter<Context>>('adapters');
     this.adapters = adapters.map((Adapter) => new Adapter(this));
 
     // Setup adapters
@@ -105,15 +108,15 @@ class Bot {
     }
   }
 
-  async loadStorage() {
+  async loadCache() {
     // Load storage
-    this.logger.info('Loading storage...');
-    const storages = await loadModulesInDirectory<Constructor<Storage>>('storage');
-    this.storages = storages.map((Storage) => new Storage(this));
+    this.logger.info('Loading caches...');
+    const caches = await loadModulesInDirectory<Cache>('cache');
+    this.caches = caches.map((Cache) => new Cache(this));
 
     // Setup adapters
-    for (const storage of this.storages) {
-      await storage.setup();
+    for (const cache of this.caches) {
+      await cache.setup();
     }
   }
 
@@ -172,6 +175,10 @@ class Bot {
 
     for (const hook of this.hooks) {
       await hook.onStop();
+    }
+
+    for (const storage of this.caches) {
+      await storage.stop();
     }
 
     this.logger.info('Disconnect from database...');

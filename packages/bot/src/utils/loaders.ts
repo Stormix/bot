@@ -1,3 +1,4 @@
+import type { Constructor } from '@/types/generics';
 import { globSync } from 'glob';
 
 export const loadModulesInDirectory = async <T>(directory: string) => {
@@ -6,7 +7,7 @@ export const loadModulesInDirectory = async <T>(directory: string) => {
   return Promise.all(
     commands.map(async (command) => {
       const { default: Command } = await import(path + '/' + command);
-      return Command as T;
+      return Command as Constructor<T>;
     })
   );
 };

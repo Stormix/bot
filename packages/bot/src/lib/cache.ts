@@ -1,7 +1,7 @@
 import type Bot from '@/lib/bot';
 import type { StorageTypes } from '@/types/storage';
 
-export default abstract class Storage {
+export default abstract class Cache {
   abstract primary: boolean;
   prefix: string;
 
@@ -28,4 +28,6 @@ export default abstract class Storage {
    * @param key Key to get
    */
   abstract get(key: string): Promise<string | null>;
+
+  abstract stop(): Promise<void>;
 }

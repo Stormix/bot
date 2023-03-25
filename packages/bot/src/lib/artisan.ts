@@ -1,6 +1,5 @@
 import { ArtisanCommands } from '@/types/artisan';
-import type { CommandContext } from '@/types/command';
-import type { Constructor } from '@/types/generics';
+import type { Context } from '@/types/context';
 import { loadModulesInDirectory } from '@/utils/loaders';
 import * as Sentry from '@sentry/node';
 import type Bot from './bot';
@@ -34,7 +33,7 @@ export default class Artisan {
    */
   async load() {
     // Load artisan commands
-    const commands = await loadModulesInDirectory<Constructor<BuiltinCommand>>('commands/artisan');
+    const commands = await loadModulesInDirectory<BuiltinCommand>('commands/artisan');
 
     // Register artisan commands
     commands.forEach((Command) => {
@@ -51,14 +50,14 @@ export default class Artisan {
    * @param context  The context of the command (e.g. twitch or discord context)
    * @returns
    */
-  async run(command: string, args: string[], context: CommandContext): Promise<void> {
+  async run(command: string, args: string[], context: Context): Promise<void> {
     try {
       await this.validate(command);
 
       if (command.toLowerCase() === 'help') {
         return context.adapter.send(
-          context,
-          `Available artisan commands: ${this.commands.map((c) => c.name).join(', ')}`
+          `Available artisan commands: ${this.commands.map((c) => c.name).join(', ')}`,
+          context
         );
       }
 
@@ -68,7 +67,7 @@ export default class Artisan {
       return artisanCommand.run(context, args);
     } catch (error) {
       if (error instanceof ValidationError) {
-        return context.adapter.send(context, error.message);
+        return context.adapter.send(error.message, context);
       }
 
       Sentry.captureException(error, {
@@ -80,8 +79,8 @@ export default class Artisan {
 
       this.logger.error('Failed to run artisan command. ', error);
       return context.adapter.send(
-        context,
-        `Failed to run artisan command. ${context.atOwner} check logs for more info.`
+        `Failed to run artisan command. ${context.atOwner} check logs for more info.`,
+        context
       );
     }
   }

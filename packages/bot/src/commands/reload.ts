@@ -1,6 +1,6 @@
 import type Bot from '@/lib/bot';
 import BuiltinCommand from '@/lib/command';
-import type { CommandContext } from '@/types/command';
+import type { Context } from '@/types/context';
 
 export default class ReloadCommand extends BuiltinCommand {
   name = 'reload';
@@ -11,8 +11,8 @@ export default class ReloadCommand extends BuiltinCommand {
     });
   }
 
-  async run(context: CommandContext) {
+  async run(context: Context) {
     await this.bot.reload();
-    return context.adapter.send(context, 'Reloaded config');
+    return context.adapter.send('Reloaded config', context);
   }
 }

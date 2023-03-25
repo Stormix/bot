@@ -1,6 +1,6 @@
 import BuiltinCommand from '@/lib/command';
 import { ArtisanCommands } from '@/types/artisan';
-import type { CommandContext } from '@/types/command';
+import type { Context } from '@/types/context';
 import { formatCommand } from '@/utils/format';
 import { parseCreateCommandArgs } from '@/utils/parser';
 import { CommandType } from '@prisma/client';
@@ -8,7 +8,7 @@ import { CommandType } from '@prisma/client';
 export default class CommandsCommand extends BuiltinCommand {
   name = ArtisanCommands.Commands;
 
-  async run(context: CommandContext, args: string[]): Promise<void> {
+  async run(context: Context, args: string[]): Promise<void> {
     switch (args[0]) {
       case 'list':
         return this.list(context);
@@ -32,7 +32,7 @@ export default class CommandsCommand extends BuiltinCommand {
    * Lists all commands
    * @param context The context of the command (e.g. twitch or discord context)
    */
-  async list(context: CommandContext): Promise<void> {
+  async list(context: Context): Promise<void> {
     // Get all commands
     const commands = await this.bot.prisma.command.findMany();
 
@@ -45,7 +45,7 @@ export default class CommandsCommand extends BuiltinCommand {
       })
       .join('\n');
 
-    return context.adapter.send(context, formattedCommands);
+    return context.adapter.send(formattedCommands, context);
   }
 
   /**
@@ -54,7 +54,7 @@ export default class CommandsCommand extends BuiltinCommand {
    * @param command The command to enable/disable
    * @param value Whether to enable or disable the command
    */
-  async toggle(context: CommandContext, command: string, value: boolean): Promise<void> {
+  async toggle(context: Context, command: string, value: boolean): Promise<void> {
     // Check if command exists
     const existingCommand = await this.bot.prisma.command.findFirst({
       where: {
@@ -64,11 +64,11 @@ export default class CommandsCommand extends BuiltinCommand {
 
     if (!existingCommand) {
       return context.adapter.send(
-        context,
         `Command ${formatCommand(command, this.bot)} does not exist. Use ${formatCommand(
           'artisan commands add',
           this.bot
-        )} to add it.`
+        )} to add it.`,
+        context
       );
     }
 
@@ -83,8 +83,8 @@ export default class CommandsCommand extends BuiltinCommand {
     });
 
     return context.adapter.send(
-      context,
-      `Command ${formatCommand(command, this.bot)} has been ${value ? 'enabled' : 'disabled'}`
+      `Command ${formatCommand(command, this.bot)} has been ${value ? 'enabled' : 'disabled'}`,
+      context
     );
   }
 
@@ -93,7 +93,7 @@ export default class CommandsCommand extends BuiltinCommand {
    * @param context The context of the command (e.g. twitch or discord context)
    * @param - args The arguments of the command (e.g. commands add <command> <response> <cooldown>)
    */
-  async add(context: CommandContext, args: string[]): Promise<void> {
+  async add(context: Context, args: string[]): Promise<void> {
     if (args.length < 3) return this.help(context);
 
     const { command, response, allArgs, isCode } = parseCreateCommandArgs(args);
@@ -111,11 +111,11 @@ export default class CommandsCommand extends BuiltinCommand {
 
     if (existingCommand) {
       return context.adapter.send(
-        context,
         `Command ${formatCommand(command, this.bot)} already exists. Use ${formatCommand(
           'artisan commands edit',
           this.bot
-        )} to edit it.`
+        )} to edit it.`,
+        context
       );
     }
 
@@ -130,7 +130,7 @@ export default class CommandsCommand extends BuiltinCommand {
       }
     });
 
-    return context.adapter.send(context, `Added command ${formatCommand(command, this.bot)}`);
+    return context.adapter.send(`Added command ${formatCommand(command, this.bot)}`, context);
   }
 
   /**
@@ -138,7 +138,7 @@ export default class CommandsCommand extends BuiltinCommand {
    * @param context The context of the command (e.g. twitch or discord context)
    * @param command  The command to remove
    */
-  async remove(context: CommandContext, command: string): Promise<void> {
+  async remove(context: Context, command: string): Promise<void> {
     if (!command) return this.help(context);
 
     // Check if command exists
@@ -150,11 +150,11 @@ export default class CommandsCommand extends BuiltinCommand {
 
     if (!existingCommand) {
       return context.adapter.send(
-        context,
         `Command ${formatCommand(command, this.bot)} does not exist. Use ${formatCommand(
           'list',
           this.bot
-        )} to list all commands.`
+        )} to list all commands.`,
+        context
       );
     }
 
@@ -165,7 +165,7 @@ export default class CommandsCommand extends BuiltinCommand {
       }
     });
 
-    return context.adapter.send(context, `Removed command ${formatCommand(command, this.bot)}`);
+    return context.adapter.send(`Removed command ${formatCommand(command, this.bot)}`, context);
   }
 
   /**
@@ -173,7 +173,7 @@ export default class CommandsCommand extends BuiltinCommand {
    * @param context The context of the command (e.g. twitch or discord context)
    * @param arg1
    */
-  async edit(context: CommandContext, args: string[]): Promise<void> {
+  async edit(context: Context, args: string[]): Promise<void> {
     if (args.length < 3) return this.help(context);
     const { command, response, isCode } = parseCreateCommandArgs(args);
 
@@ -186,11 +186,11 @@ export default class CommandsCommand extends BuiltinCommand {
 
     if (!existingCommand) {
       return context.adapter.send(
-        context,
         `Command ${formatCommand(command, this.bot)} does not exist. Use ${formatCommand(
           'artisan commands add',
           this.bot
-        )} to add it.`
+        )} to add it.`,
+        context
       );
     }
 
@@ -205,26 +205,26 @@ export default class CommandsCommand extends BuiltinCommand {
       }
     });
 
-    return context.adapter.send(context, `Updated command ${formatCommand(command, this.bot)}`);
+    return context.adapter.send(`Updated command ${formatCommand(command, this.bot)}`, context);
   }
 
   /**
    * Displays help for the command
    * @param context The context of the command (e.g. twitch or discord context)
    */
-  async help(context: CommandContext, command?: string): Promise<void> {
+  async help(context: Context, command?: string): Promise<void> {
     switch (command) {
       case 'add':
         return context.adapter.send(
-          context,
-          `Usage: ${context.atAuthor} -> ${this.name} add <command> <response> <cooldown> <enabled>`
+          `Usage: ${context.atAuthor} -> ${this.name} add <command> <response> <cooldown> <enabled>`,
+          context
         );
       case 'edit':
-        return context.adapter.send(context, `Usage: ${context.atAuthor} -> ${this.name} edit <command> <response>`);
+        return context.adapter.send(`Usage: ${context.atAuthor} -> ${this.name} edit <command> <response>`, context);
       default:
         return context.adapter.send(
-          context,
-          `Usage: ${context.atAuthor} -> ${this.name} <list|enable|disable|add|remove|edit|help>`
+          `Usage: ${context.atAuthor} -> ${this.name} <list|enable|disable|add|remove|edit|help>`,
+          context
         );
     }
   }

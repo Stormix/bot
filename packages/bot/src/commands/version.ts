@@ -1,6 +1,6 @@
 import type Bot from '@/lib/bot';
 import BuiltinCommand from '@/lib/command';
-import type { CommandContext } from '@/types/command';
+import type { Context } from '@/types/context';
 
 export default class VersionCommand extends BuiltinCommand {
   name = 'version';
@@ -13,10 +13,10 @@ export default class VersionCommand extends BuiltinCommand {
     });
   }
 
-  async run(context: CommandContext) {
+  async run(context: Context) {
     return context.adapter.send(
-      context,
-      `I am currently running version **${this.bot.config.version}** \n > https://github.com/Stormix/bot/releases/tag/v${this.bot.config.version}\n`
+      `I am currently running version **${this.bot.config.version}** \n > https://github.com/Stormix/bot/releases/tag/v${this.bot.config.version}\n`,
+      context
     );
   }
 }

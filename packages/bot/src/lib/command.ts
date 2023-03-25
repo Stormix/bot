@@ -1,4 +1,5 @@
-import type { BuiltinCommandOptions, CommandContext } from '@/types/command';
+import type { BuiltinCommandOptions } from '@/types/command';
+import type { Context } from '@/types/context';
 import type Bot from './bot';
 import type Logger from './logger';
 
@@ -50,7 +51,7 @@ abstract class BuiltinCommand {
    * @param context The context of the command (e.g. twitch or discord context)
    * @param args
    */
-  abstract run(context: CommandContext, args: string[]): Promise<void>;
+  abstract run(context: Context, args: string[]): Promise<void>;
 }
 
 export default BuiltinCommand;
