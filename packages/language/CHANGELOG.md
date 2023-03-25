@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.10.0 (2023-03-25)
+
+
+### Features
+
+* private messages + refactor ([3cdafa0](https://github.com/Stormix/bot/commit/3cdafa0be52f0ba2fc0e0c1e977ecbaaad784943))
+
+
+
+
+
 ## 1.9.1 (2023-03-24)
 
 
