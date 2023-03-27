@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.11.0 (2023-03-27)
+
+
+### Features
+
+* conversations (wip) ([1158cd1](https://github.com/Stormix/bot/commit/1158cd1699eee16a8895c5a403aa862c4b38c334))
+
+
+
+
+
 ## 1.10.1 (2023-03-25)
 
 **Note:** Version bump only for package @bot/language
