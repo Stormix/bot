@@ -1,3 +1,5 @@
+import type Activity from '@/lib/activity';
+import { ActivityType } from '@/lib/activity';
 import type Bot from '@/lib/bot';
 import type { Context, DiscordContext } from '@/types/context';
 import { Adapters } from '@prisma/client';
@@ -46,7 +48,23 @@ export default class DiscordAdapter extends Adapter<DiscordContext> {
     if ((context as DiscordContext).message.channel.type !== ChannelType.DM) {
       throw new Error('Cannot send a message to a non-DM channel');
     }
-    await (context as DiscordContext).message.channel.send(message);
+
+    const c = context as DiscordContext;
+    const activity: Activity<ActivityType.Conversation> = {
+      type: ActivityType.Conversation,
+      payload: {
+        text: message,
+        from: {
+          id: c.message.author.id,
+          name: c.message.author.username
+        },
+        context
+      }
+    };
+
+    const responses = await this.bot.brain.handle(activity);
+
+    await (context as DiscordContext).message.channel.send(responses.join(' '));
   }
 
   async setup() {

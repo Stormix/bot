@@ -31,7 +31,9 @@ const env = cleanEnv(process.env, {
   }),
   REDIS_USERNAME: str({
     default: ''
-  })
+  }),
+  HUGGING_MODEL: str({}),
+  HUGGING_API_KEY: str({})
 });
 
 export type Env = typeof env;
