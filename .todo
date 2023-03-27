@@ -1,11 +1,13 @@
 Bot:
-  - Cron-messages
   ✔ Finish artisan commands to CRUD commands
   ✔ Configurable bot settings
-  - emote support
   ✔ command cooldowns
-  - Private messages & whispers
+  ✔ Private messages & whispers (wihspers are not supported by twitch)
+  - Cron-messages
+  - emote support
   - Implement an event system
+  - Persist conversations in Redis to be used as context for the model requests
+  - Train bot on *my* personal messages
 
 Language:
   - Add new functions to the language system:

@@ -23,6 +23,11 @@ Very opinionated stack, but it works for me.
 
 Check the [.todo](./.todo) file for the current feature set.
 
+## Skills
+### Conversational
+
+Bot uses an AI model to respond to messages in chat and discord DMs. The model is based of [GODEL](https://github.com/microsoft/GODEL) and will be trained on my own dataset in the future.
+
 
 ## Installation
 
