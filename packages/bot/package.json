@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@bot/language": "workspace:^1.11.1",
-    "@prisma/client": "^4.11.0",
+    "@prisma/client": "^5.0.0",
     "@sentry/node": "^7.45.0",
     "@sentry/profiling-node": "^0.3.0",
     "@sentry/tracing": "^7.45.0",
@@ -54,7 +54,7 @@
     "hpp": "^0.2.3",
     "lodash": "^4.17.21",
     "node-graceful-shutdown": "^1.1.5",
-    "prisma": "^4.11.0",
+    "prisma": "^5.0.0",
     "redis": "^4.6.5",
     "reflect-metadata": "^0.1.13",
     "tslog": "^4.8.2",
