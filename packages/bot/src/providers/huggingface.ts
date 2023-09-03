@@ -38,15 +38,13 @@ export default class HuggingFace {
   public static async query(payload: ModelPayload) {
     const instance = HuggingFace.getInstance();
     try {
-      const result = (
+      return (
         await instance.api.post(env.HUGGING_MODEL, {
           inputs: payload,
           use_cache: true,
           wait_for_model: true
         })
       )?.data;
-
-      return result;
     } catch (error) {
       if (error instanceof AxiosError) {
         if (error.response) {

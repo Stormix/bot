@@ -24,12 +24,6 @@ export default class Brain {
   }
 
   async handle(activity: Activity<ActivityType>) {
-    for (const skill of this.skills) {
-      if (skill.canHandle(activity)) {
-        await skill.handle(activity);
-      }
-    }
-
     return Promise.all(
       this.skills.filter((skill) => skill.canHandle(activity)).map(async (skill) => skill.handle(activity))
     );

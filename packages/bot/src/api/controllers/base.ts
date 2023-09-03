@@ -1,11 +1,14 @@
+import type Bot from '@/lib/bot';
 import type Logger from '@/lib/logger';
 import type { Response } from 'express';
 
 export default abstract class BaseController {
   protected readonly logger: Logger;
+  protected readonly bot: Bot;
 
-  constructor(logger: Logger) {
-    this.logger = logger;
+  constructor(bot: Bot) {
+    this.bot = bot;
+    this.logger = bot.logger.getSubLogger({ name: this.constructor.name });
   }
 
   public jsonResponse(res: Response, code: number, message: string) {

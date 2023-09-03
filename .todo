@@ -6,9 +6,12 @@ Bot:
   - Cron-messages
   - emote support
   - Implement an event system
+  - Reminder/todo command
+
+AI model:
   - Persist conversations in Redis to be used as context for the model requests
   - Train bot on *my* personal messages
 
 Language:
   - Add new functions to the language system:
-    - Ability to execute mod commands
+  - Ability to execute mod commands

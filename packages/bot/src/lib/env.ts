@@ -33,7 +33,9 @@ const env = cleanEnv(process.env, {
     default: ''
   }),
   HUGGING_MODEL: str({}),
-  HUGGING_API_KEY: str({})
+  HUGGING_API_KEY: str({}),
+  SPOTIFY_CLIENT_ID: str({}),
+  SPOTIFY_CLIENT_SECRET: str({})
 });
 
 export type Env = typeof env;

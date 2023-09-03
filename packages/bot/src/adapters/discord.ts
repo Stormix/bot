@@ -48,7 +48,6 @@ export default class DiscordAdapter extends Adapter<DiscordContext> {
     if ((context as DiscordContext).message.channel.type !== ChannelType.DM) {
       throw new Error('Cannot send a message to a non-DM channel');
     }
-
     const c = context as DiscordContext;
     const activity: Activity<ActivityType.Conversation> = {
       type: ActivityType.Conversation,

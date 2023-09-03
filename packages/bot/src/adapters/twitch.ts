@@ -1,3 +1,5 @@
+import type { ActivityPayload } from '@/lib/activity';
+import { ActivityType } from '@/lib/activity';
 import type Bot from '@/lib/bot';
 import type { Context, TwitchContext } from '@/types/context';
 import { Adapters } from '@prisma/client';
@@ -19,7 +21,7 @@ export default class TwitchAdapter extends Adapter<TwitchContext> {
 
   isOwner(message: Context['message']) {
     const username = (message as PrivateMessage).username;
-    return username === this.bot.config.env.TWITCH_USERNAME;
+    return username === this.bot.config.env.TWITCH_USERNAME || username === this.bot.config.env.TWITCH_CHANNEL;
   }
 
   createContext(message: PrivateMessage | BaseMessage) {
@@ -67,6 +69,39 @@ export default class TwitchAdapter extends Adapter<TwitchContext> {
     this.logger.info('Twitch adapter is ready!');
   }
 
+  async listenForRewardRedemptions() {
+    this.client?.on(ChatEvents.ALL, async (message) => {
+      if (!message) return;
+      if (message.command !== Commands.PRIVATE_MESSAGE) return;
+      const tags = message.tags as Record<string, string>;
+      if (!tags?.['customRewardId']) return;
+      const rewardId = tags.customRewardId;
+      const text = message.message;
+      this.logger.debug(`Received reward redemption for ${rewardId} with text ${text}`);
+
+      const activityType = this.bot.config.twitch.rewardMapping[rewardId];
+
+      if (!activityType) return;
+
+      // eslint-disable-next-line sonarjs/no-small-switch
+      switch (activityType) {
+        case ActivityType.Music:
+          const payload: ActivityPayload['music'] = {
+            song: text,
+            context: this.createContext(message as PrivateMessage)
+          };
+          this.bot.brain.handle({
+            type: activityType,
+            payload
+          });
+          break;
+        default:
+          this.logger.warn(`Unknown activity type ${activityType} for reward ${rewardId}`);
+          return;
+      }
+    });
+  }
+
   async listenForCommands() {
     this.client?.on(ChatEvents.ALL, async (message) => {
       if (!message) return;
@@ -88,6 +123,7 @@ export default class TwitchAdapter extends Adapter<TwitchContext> {
       await this.message(message.message, this.createContext(message));
     });
   }
+
   async listen() {
     if (!this.client) throw new Error('Twitch client is not initialized!');
 
@@ -97,6 +133,7 @@ export default class TwitchAdapter extends Adapter<TwitchContext> {
 
     await this.listenForCommands();
     await this.listenForMessages();
+    await this.listenForRewardRedemptions();
 
     await this.client.connect();
     await this.client.join(this.bot.config.env.TWITCH_CHANNEL);

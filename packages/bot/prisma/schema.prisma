@@ -35,3 +35,15 @@ model Setting {
   name    String
   value   String
 }
+
+enum ServiceType {
+  SPOTIFY
+}
+
+model Credentials {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  service    ServiceType
+  value   Json
+
+  @@unique([service])
+}

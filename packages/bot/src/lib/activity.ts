@@ -1,7 +1,8 @@
 import type { Context } from '@/types/context';
 
 export enum ActivityType {
-  Conversation = 'conversation'
+  Conversation = 'conversation',
+  Music = 'music'
 }
 
 export type ActivityPayload = {
@@ -11,6 +12,10 @@ export type ActivityPayload = {
       id: string;
       name: string;
     };
+    context: Context;
+  };
+  [ActivityType.Music]: {
+    song: string;
     context: Context;
   };
 };

@@ -1,4 +1,5 @@
 import App from '@/api/app';
+import SpotifyRoutes from '@/api/routes/spotify';
 import type { BotConfig } from '@/config/bot';
 import { defaultConfig } from '@/config/bot';
 import type Adapter from '@/lib/adapter';
@@ -10,6 +11,7 @@ import { omit } from 'lodash';
 import Artisan from './artisan';
 import Brain from './brain';
 import type Cache from './cache';
+import CredentialsManager from './credentials';
 import type Hook from './hook';
 import Logger from './logger';
 import Processor from './processor';
@@ -20,6 +22,7 @@ class Bot {
   hooks: Hook[] = [];
   caches: Cache[] = [];
 
+  public readonly credentials: CredentialsManager;
   public readonly brain: Brain;
   public readonly processor: Processor;
   public readonly logger: Logger;
@@ -35,7 +38,8 @@ class Bot {
     this.brain = new Brain(this);
     this.processor = new Processor(this);
     this.artisan = new Artisan(this);
-    this.api = new App(this, []);
+    this.api = new App(this, [new SpotifyRoutes(this)]);
+    this.credentials = new CredentialsManager(this);
   }
 
   get prefix() {
@@ -134,8 +138,9 @@ class Bot {
     }, {} as Dictionary<string>);
 
     this.config = {
-      ...Bot.validateConfig({ ...omit(this.config, 'env'), ...overwrittenConfig }),
-      env: this.config.env
+      ...Bot.validateConfig({ ...omit(this.config, ['env', 'twitch']), ...overwrittenConfig }),
+      env: this.config.env,
+      twitch: this.config.twitch // TODO: move to DB
     } as BotConfig;
   }
 
