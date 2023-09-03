@@ -13,7 +13,7 @@
     "@typescript-eslint/parser": "^5.56.0",
     "eslint": "^8.36.0",
     "eslint-config-prettier": "^8.8.0",
-    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-sonarjs": "^0.20.0",
     "lerna": "^6.6.1",
     "prettier": "^2.8.7",
