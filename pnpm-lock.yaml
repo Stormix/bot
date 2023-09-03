@@ -39,7 +39,7 @@ importers:
   packages/bot:
     dependencies:
       '@bot/language':
-        specifier: workspace:^1.11.1
+        specifier: workspace:^1.12.0
         version: link:../language
       '@prisma/client':
         specifier: ^5.2.0

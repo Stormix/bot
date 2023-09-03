@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.12.0 (2023-09-03)
+
+
+### Features
+
+* twitch song request ([21c4b63](https://github.com/Stormix/bot/commit/21c4b637843f02e80050ae25ab5a1b1a64eb793c))
+
+
+
+
+
 ## 1.11.1 (2023-03-29)
 
 **Note:** Version bump only for package @bot/bot
