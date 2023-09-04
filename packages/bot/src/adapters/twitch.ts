@@ -251,7 +251,7 @@ export default class TwitchAdapter extends Adapter<TwitchContext> {
             this.logger.error('Failed to end poll', e);
             reject(e);
           }
-        }, 10 * 1000);
+        }, 60 * 1000);
 
         await context.adapter.send(`Vote kick poll has started!`, context);
       } catch (e) {
