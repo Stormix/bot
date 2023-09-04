@@ -1,3 +1,8 @@
+Live:
+  - Skip song reward
+  - Votekick system (timeout bnadem)
+
+
 Bot:
   ✔ Finish artisan commands to CRUD commands
   ✔ Configurable bot settings
@@ -7,6 +12,7 @@ Bot:
   - emote support
   - Implement an event system
   - Reminder/todo command
+  
 
 AI model:
   - Persist conversations in Redis to be used as context for the model requests

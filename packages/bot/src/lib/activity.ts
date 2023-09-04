@@ -2,7 +2,9 @@ import type { Context } from '@/types/context';
 
 export enum ActivityType {
   Conversation = 'conversation',
-  Music = 'music'
+  AddSongToQueue = 'addSongToQueue',
+  SkipSong = 'skipSong',
+  Votekick = 'votekick'
 }
 
 export type ActivityPayload = {
@@ -14,8 +16,15 @@ export type ActivityPayload = {
     };
     context: Context;
   };
-  [ActivityType.Music]: {
+  [ActivityType.AddSongToQueue]: {
     song: string;
+    context: Context;
+  };
+  [ActivityType.SkipSong]: {
+    context: Context;
+  };
+  [ActivityType.Votekick]: {
+    username: string;
     context: Context;
   };
 };

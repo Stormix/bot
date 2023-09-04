@@ -9,8 +9,6 @@ const env = cleanEnv(process.env, {
   SENTRY_DSN: str({ default: '' }),
   TWITCH_CLIENT_ID: str(),
   TWITCH_CLIENT_SECRET: str(),
-  TWITCH_ACCESS_TOKEN: str(),
-  TWITCH_REFRESH_TOKEN: str(),
   TWITCH_USERNAME: str({
     default: 'StormixBot'
   }),

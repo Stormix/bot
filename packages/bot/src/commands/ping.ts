@@ -16,7 +16,7 @@ export default class PingCommand extends BuiltinCommand {
         const c = context as TwitchContext;
         const time = new Date(c.message.timestamp).getTime();
         const now = new Date().getTime();
-        const diff = time - now;
+        const diff = Math.abs(time - now);
         return c.adapter.send(`Pong! Took ${diff}ms`, c);
       }
       default: {

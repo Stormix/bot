@@ -256,4 +256,16 @@ export default class Spotify {
       return null;
     }
   }
+
+  public async skipSong(tokens: SpotifyTokens) {
+    try {
+      const api = await this.getRefreshedInstance(tokens);
+      const response = await api.post('/me/player/next');
+
+      return response.data;
+    } catch (error) {
+      this.logger.error('Failed to skip song: ', error);
+      return null;
+    }
+  }
 }

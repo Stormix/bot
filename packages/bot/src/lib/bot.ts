@@ -1,5 +1,6 @@
 import App from '@/api/app';
 import SpotifyRoutes from '@/api/routes/spotify';
+import TwitchRoutes from '@/api/routes/twitch';
 import type { BotConfig } from '@/config/bot';
 import { defaultConfig } from '@/config/bot';
 import type Adapter from '@/lib/adapter';
@@ -38,7 +39,7 @@ class Bot {
     this.brain = new Brain(this);
     this.processor = new Processor(this);
     this.artisan = new Artisan(this);
-    this.api = new App(this, [new SpotifyRoutes(this)]);
+    this.api = new App(this, [new SpotifyRoutes(this), new TwitchRoutes(this)]);
     this.credentials = new CredentialsManager(this);
   }
 

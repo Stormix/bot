@@ -38,6 +38,8 @@ model Setting {
 
 enum ServiceType {
   SPOTIFY
+  TWITCH
+  TWITCH_BROADCASTER
 }
 
 model Credentials {
