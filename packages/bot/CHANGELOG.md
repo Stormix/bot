@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.13.1 (2023-09-05)
+
+
+### Bug Fixes
+
+* small fixes ([d6e4724](https://github.com/Stormix/bot/commit/d6e47248cc6f95d1c2cf337578c81ef5f3661e65))
+
+
+
+
+
 # 1.13.0 (2023-09-04)
 
 
