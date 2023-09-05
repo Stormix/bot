@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.13.0 (2023-09-04)
+
+
+### Features
+
+* **rewards:** skip song request & votekick ([1f2d256](https://github.com/Stormix/bot/commit/1f2d256f09e7f0e830126aeab9e80339c74edfe3))
+
+
+
+
+
 # 1.12.0 (2023-09-03)
 
 
