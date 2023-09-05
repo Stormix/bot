@@ -126,12 +126,20 @@ export default class TwitchAdapter extends Adapter<TwitchContext> {
 
       if (!activityType) return;
 
-      // eslint-disable-next-line sonarjs/no-small-switch
       switch (activityType) {
-        case ActivityType.AddSongToQueue:
-        case ActivityType.SkipSong: {
+        case ActivityType.AddSongToQueue: {
           const payload: ActivityPayload[ActivityType.AddSongToQueue] = {
             song: text,
+            context: this.createContext(message as PrivateMessage)
+          };
+          this.bot.brain.handle({
+            type: activityType,
+            payload
+          });
+          break;
+        }
+        case ActivityType.SkipSong: {
+          const payload: ActivityPayload[ActivityType.SkipSong] = {
             context: this.createContext(message as PrivateMessage)
           };
           this.bot.brain.handle({

@@ -32,7 +32,8 @@ export default class Conversation extends Skill {
       this.logger.debug(`Received response from HuggingFace: `, response);
 
       return (
-        response?.generated_text ?? `oopsie doopsie, brain not workie, try again later. ${response.estimated_time}s`
+        response?.generated_text ??
+        `oopsie doopsie, brain not workie, try again later. ${response?.estimated_time ?? '60'}s`
       );
     } catch (error) {
       Sentry.captureException(error);

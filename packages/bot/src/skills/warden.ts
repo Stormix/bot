@@ -16,7 +16,7 @@ export default class Warden extends Skill {
     try {
       const { username, context } = activity.payload;
 
-      if (username.includes('StormixBot')) return;
+      if (username?.toLocaleLowerCase()?.includes('stormixbot')) return;
 
       // Create a poll for votekick
       const result = await (context.adapter as TwitchAdapter).createPoll(
