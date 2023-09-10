@@ -17,8 +17,10 @@ class TwitchRoutes implements Route {
   }
 
   private initializeRoutes() {
-    this.router.get('/callback', (req: Request, res: Response) => this.controller.authenticateUser(req, res));
-    this.router.get('/callback2', (req: Request, res: Response) => this.controller.authenticateBroadcaster(req, res));
+    this.router.get('/bot_callback', (req: Request, res: Response) => this.controller.authenticateUser(req, res));
+    this.router.get('/broadcaster_callback', (req: Request, res: Response) =>
+      this.controller.authenticateBroadcaster(req, res)
+    );
   }
 }
 

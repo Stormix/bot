@@ -5,20 +5,17 @@
     }
   ],
   "settings": {
-    "typescript.preferences.importModuleSpecifier": "shortest",
     "editor.codeActionsOnSave": {
       "source.fixAll.eslint": true,
       "source.organizeImports": true
     },
-    "cSpell.words": [
-      "cooldown",
-      "Funcall"
-    ],
+    "editor.formatOnSave": false,
+    "typescript.tsdk": "node_modules\\typescript\\lib",
+    "editor.foldingImportsByDefault": true,
+    "typescript.preferences.importModuleSpecifier": "shortest",
     "conventionalCommits.scopes": [
       "typings",
       "releases"
     ],
-    "discord.enabled": true,
-    "typescript.tsdk": "node_modules\\typescript\\lib",
   }
 }

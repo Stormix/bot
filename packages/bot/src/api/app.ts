@@ -6,12 +6,13 @@ import * as Sentry from '@sentry/node';
 import * as Tracing from '@sentry/tracing';
 import compression from 'compression';
 import cors from 'cors';
-import type { Application, Response } from 'express';
+import type { Application, Request, Response } from 'express';
 import express from 'express';
 import helmet from 'helmet';
 import hpp from 'hpp';
 import type { Server as HttpServer } from 'http';
 import { createServer } from 'http';
+import errorMiddleware from './middleware/error';
 import type Route from './routes/route';
 
 export default class App {
@@ -92,8 +93,7 @@ export default class App {
     this.app.use(
       express.json({
         limit: '50mb',
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        verify: (req: any, _, buf: unknown) => {
+        verify: (req: Request & { rawBody: Buffer }, _, buf: Buffer) => {
           req.rawBody = buf;
         }
       })
@@ -123,7 +123,7 @@ export default class App {
       // The error handler must be before any other error middleware and after all controllers
       this.app.use(Sentry.Handlers.errorHandler());
     }
-    // this.app.use(errorMiddleware);
+    this.app.use(errorMiddleware);
   }
 
   private initializeSentry() {

@@ -9,12 +9,13 @@ import * as Sentry from '@sentry/node';
 
 export default class Warden extends Skill {
   constructor(bot: Bot) {
-    super(bot, [ActivityType.Votekick]);
+    super(bot, [ActivityType.TwitchRewardsVotekick]);
   }
 
-  async handle(activity: Activity<ActivityType.Votekick>) {
+  async handle(activity: Activity<ActivityType.TwitchRewardsVotekick>) {
     try {
-      const { username, context } = activity.payload;
+      const { context } = activity.payload;
+      const username = activity.payload.username.replace('@', '');
 
       if (username?.toLocaleLowerCase()?.includes('stormixbot')) return;
 

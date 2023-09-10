@@ -141,7 +141,7 @@ class Bot {
     this.config = {
       ...Bot.validateConfig({ ...omit(this.config, ['env', 'twitch']), ...overwrittenConfig }),
       env: this.config.env,
-      twitch: this.config.twitch // TODO: move to DB
+      twitch: this.config.twitch
     } as BotConfig;
   }
 
@@ -157,15 +157,12 @@ class Bot {
    */
   async listen() {
     this.logger.debug('Loaded', this.config.env.NODE_ENV, 'config');
-    for (const adapter of this.adapters) {
-      await adapter.listen();
-    }
 
-    for (const hook of this.hooks) {
-      await hook.onReady();
-    }
-
-    await this.api.listen();
+    await Promise.all([
+      ...this.adapters.map(async (adapter) => adapter.listen()),
+      ...this.hooks.map(async (hook) => hook.onReady()),
+      this.api.listen()
+    ]);
   }
 
   /**
@@ -174,21 +171,12 @@ class Bot {
   async stop() {
     this.logger.debug('Stopping bot...');
 
-    this.logger.info('Disconnecting from adapters...');
-    for (const adapter of this.adapters) {
-      await adapter.stop();
-    }
-
-    for (const hook of this.hooks) {
-      await hook.onStop();
-    }
-
-    for (const storage of this.caches) {
-      await storage.stop();
-    }
-
-    this.logger.info('Disconnect from database...');
-    await this.prisma.$disconnect();
+    await Promise.all([
+      ...this.adapters.map(async (adapter) => adapter.stop()),
+      ...this.hooks.map(async (hook) => hook.onStop()),
+      ...this.caches.map(async (storage) => storage.stop()),
+      this.prisma.$disconnect()
+    ]);
   }
 }
 

@@ -59,7 +59,8 @@ export default class TwitchAdapter extends Adapter<TwitchContext> {
     if (!botTokens) {
       this.logger.debug(
         `No twitch tokens found, generate new ones by clicking this link: ${Twitch.login(
-          'http://localhost:3000/twitch'
+          'http://localhost:3000/twitch',
+          'bot_callback'
         )}`
       );
       return;
@@ -87,7 +88,7 @@ export default class TwitchAdapter extends Adapter<TwitchContext> {
       this.logger.debug(
         `No twitch tokens found, generate new ones by clicking this link: ${Twitch.login(
           'http://localhost:3000/twitch',
-          'callback2'
+          'broadcaster_callback'
         )}`
       );
       return;
@@ -127,8 +128,8 @@ export default class TwitchAdapter extends Adapter<TwitchContext> {
       if (!activityType) return;
 
       switch (activityType) {
-        case ActivityType.AddSongToQueue: {
-          const payload: ActivityPayload[ActivityType.AddSongToQueue] = {
+        case ActivityType.TwitchRewardsAddSongToQueue: {
+          const payload: ActivityPayload[ActivityType.TwitchRewardsAddSongToQueue] = {
             song: text,
             context: this.createContext(message as PrivateMessage)
           };
@@ -138,8 +139,8 @@ export default class TwitchAdapter extends Adapter<TwitchContext> {
           });
           break;
         }
-        case ActivityType.SkipSong: {
-          const payload: ActivityPayload[ActivityType.SkipSong] = {
+        case ActivityType.TwitchRewardsSkipSong: {
+          const payload: ActivityPayload[ActivityType.TwitchRewardsSkipSong] = {
             context: this.createContext(message as PrivateMessage)
           };
           this.bot.brain.handle({
@@ -148,8 +149,8 @@ export default class TwitchAdapter extends Adapter<TwitchContext> {
           });
           break;
         }
-        case ActivityType.Votekick:
-          const payload: ActivityPayload[ActivityType.Votekick] = {
+        case ActivityType.TwitchRewardsVotekick:
+          const payload: ActivityPayload[ActivityType.TwitchRewardsVotekick] = {
             username: text,
             context: this.createContext(message as PrivateMessage)
           };
@@ -222,6 +223,7 @@ export default class TwitchAdapter extends Adapter<TwitchContext> {
         const poll = data[0];
 
         this.logger.debug(`Created poll with id ${poll.id}`);
+
         setTimeout(async () => {
           try {
             this.logger.debug(`Ending poll with id ${poll.id}`);
