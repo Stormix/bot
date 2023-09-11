@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 1.13.3 (2023-09-11)
+
+
+### Bug Fixes
+
+* errors on mention + remove deploy ([aa690f5](https://github.com/Stormix/bot/commit/aa690f54aaca82b0deb7dd417553d2976c82da9e))
+
+
+
+
+
 ## 1.13.2 (2023-09-10)
 
 **Note:** Version bump only for package @bot/bot
