@@ -94,12 +94,6 @@ export default class DiscordAdapter extends Adapter<DiscordContext> {
       let args: string[] = [];
       let command: string | undefined = undefined;
 
-      // Check if the bot is mentioned
-      if (this.client.user && message.mentions.has(this.client.user)) {
-        args = message.content.slice(this.client.user.toString().length).trim().split(/ +/);
-        command = args.shift()?.toLowerCase();
-      }
-
       // Check if the message starts with the prefix
       if (message.content.startsWith(this.bot.config.prefix)) {
         args = message.content.slice(this.bot.config.prefix.length).trim().split(/ +/);
