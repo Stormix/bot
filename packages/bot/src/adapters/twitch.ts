@@ -159,6 +159,16 @@ export default class TwitchAdapter extends Adapter<TwitchContext> {
             payload
           });
           break;
+        case ActivityType.TwitchRewardsEndStream: {
+          const payload: ActivityPayload[ActivityType.TwitchRewardsEndStream] = {
+            context: this.createContext(message as PrivateMessage)
+          };
+          this.bot.brain.handle({
+            type: activityType,
+            payload
+          });
+          break;
+        }
         default:
           this.logger.warn(`Unknown activity type ${activityType} for reward ${rewardId}`);
           return;

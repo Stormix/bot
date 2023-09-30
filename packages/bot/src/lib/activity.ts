@@ -4,7 +4,8 @@ export enum ActivityType {
   Conversation = 'conversation',
   TwitchRewardsAddSongToQueue = 'TwitchRewardsAddSongToQueue',
   TwitchRewardsSkipSong = 'TwitchRewardsSkipSong',
-  TwitchRewardsVotekick = 'TwitchRewardsVotekick'
+  TwitchRewardsVotekick = 'TwitchRewardsVotekick',
+  TwitchRewardsEndStream = 'TwitchRewardsEndStream'
 }
 
 export type ActivityPayload = {
@@ -25,6 +26,9 @@ export type ActivityPayload = {
   };
   [ActivityType.TwitchRewardsVotekick]: {
     username: string;
+    context: Context;
+  };
+  [ActivityType.TwitchRewardsEndStream]: {
     context: Context;
   };
 };
