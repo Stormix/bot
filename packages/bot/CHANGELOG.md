@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# 1.14.0 (2023-09-30)
+
+
+### Features
+
+* end stream reward ([14776bb](https://github.com/Stormix/bot/commit/14776bb1d0fd6c6c0063d70884abf9733ad65775))
+
+
+
+
+
 ## 1.13.3 (2023-09-11)
 
 
